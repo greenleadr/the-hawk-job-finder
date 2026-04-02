@@ -81,6 +81,18 @@ _NON_US_RE = re.compile(
     re.I,
 )
 
+# Locations that disqualify a job even if "remote" appears in description
+_EXCLUDE_LOCATION_RE = re.compile(
+    r"\b(new\s+york|nyc|manhattan|brooklyn|san\s+francisco|sf\b|bay\s+area"
+    r"|los\s+angeles|la\b|chicago|boston|seattle|denver|austin|portland"
+    r"|atlanta|miami|dallas|houston|phoenix|philadelphia"
+    r"|washington\s*,?\s*d\.?c\.?"
+    r"|london|toronto|vancouver|montreal|canada"
+    r"|berlin|paris|dublin|amsterdam|sydney|melbourne"
+    r"|singapore|tokyo|bangalore|mumbai|hyderabad)\b",
+    re.I,
+)
+
 # Negative keywords — skip jobs containing these terms in title or description
 _NEGATIVE_RE = re.compile(
     r"\b("
@@ -192,14 +204,39 @@ def _deduplicate(
 # ---------------------------------------------------------------------------
 
 def _matches_location(job: dict[str, Any]) -> bool:
-    text = " ".join([
-        job.get("location", ""),
-        job.get("title", ""),
-        (job.get("description", "") or "")[:500],
-    ])
-    if _NON_US_RE.search(text):
+    location = job.get("location", "")
+    title = job.get("title", "")
+    desc_start = (job.get("description", "") or "")[:500]
+
+    full_text = f"{location} {title} {desc_start}"
+
+    # Reject non-US postings
+    if _NON_US_RE.search(full_text):
         return False
-    return bool(_LOCAL_RE.search(text) or _REMOTE_RE.search(text))
+
+    # If the location field itself matches a local area, accept
+    if _LOCAL_RE.search(location):
+        return True
+
+    # If "remote" is in the location field or title, accept
+    # (but NOT if it's only in the description — too many false positives)
+    loc_and_title = f"{location} {title}"
+    if _REMOTE_RE.search(loc_and_title):
+        # But reject if the location clearly says a non-local city
+        if _EXCLUDE_LOCATION_RE.search(location):
+            return False
+        return True
+
+    # If description mentions remote but location says a non-local city, reject
+    # This catches "New York, NY" jobs that mention remote flexibility in the JD
+    if _REMOTE_RE.search(desc_start) and _EXCLUDE_LOCATION_RE.search(location):
+        return False
+
+    # Check if local area mentioned anywhere
+    if _LOCAL_RE.search(full_text):
+        return True
+
+    return False
 
 
 def _passes_negative_filter(job: dict[str, Any]) -> bool:
