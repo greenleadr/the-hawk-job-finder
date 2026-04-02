@@ -81,7 +81,7 @@ def send_digest(
         sender = sender or env_sender
         recipients = recipients or env_to
 
-    subject = f"Job Digest — {date_str} — {job_count} matches"
+    subject = f"\U0001f985 The Hawk Quest Board — {date_str} — {job_count} quests found"
 
     msg = MIMEMultipart("alternative")
     msg["From"] = sender
@@ -90,9 +90,9 @@ def send_digest(
 
     # Plain-text fallback
     plain = (
-        f"Hawk Job Finder — {date_str}\n\n"
-        f"{job_count} new job matches found.\n"
-        f"View the HTML version of this email for the full digest."
+        f"The Hawk — Quest Board — {date_str}\n\n"
+        f"{job_count} new quests await your consideration.\n"
+        f"View the HTML version of this email for the full quest board."
     )
     msg.attach(MIMEText(plain, "plain", "utf-8"))
     msg.attach(MIMEText(html_body, "html", "utf-8"))
