@@ -16,48 +16,81 @@ from typing import Any
 
 TOP_N = 10
 
+# ---------------------------------------------------------------------------
+# Color palette — elegant fantasy
+# ---------------------------------------------------------------------------
+# Background:  #faf6ef (warm ivory)
+# Header bg:   #2c1810 (deep mahogany)
+# Gold accent:  #b8963e
+# Gold light:   #d4b869
+# Text dark:    #2c1810
+# Text body:    #4a3728
+# Text muted:   #8a7560
+# Score green:  #4a7c3f (forest)
+# Score amber:  #9e7c23 (antique gold)
+# Score red:    #8b3a3a (dark garnet)
+# Pill bg:      #f0e8d8 (warm sand)
+# Pill border:  #d4c4a8
+# Card bg:      #ffffff
+# Divider:      #e8dcc8
+
+_BG_IVORY = "#faf6ef"
+_BG_HEADER = "#2c1810"
+_GOLD = "#b8963e"
+_GOLD_LIGHT = "#d4b869"
+_TEXT_DARK = "#2c1810"
+_TEXT_BODY = "#4a3728"
+_TEXT_MUTED = "#8a7560"
+_SCORE_GREEN = "#4a7c3f"
+_SCORE_AMBER = "#9e7c23"
+_SCORE_RED = "#8b3a3a"
+_PILL_BG = "#f0e8d8"
+_PILL_BORDER = "#d4c4a8"
+_CARD_BG = "#ffffff"
+_DIVIDER = "#e8dcc8"
+
 
 def _esc(text: str) -> str:
     return html.escape(text, quote=True)
 
 
-def _score_color(score: int) -> tuple[str, str]:
-    """Return (background, label) for a score badge."""
+def _score_color(score: int) -> tuple[str, str, str]:
+    """Return (background, text_color, label) for a score badge."""
     if score >= 70:
-        return "#c9a84c", "Worthy"
+        return _SCORE_GREEN, "#ffffff", "Worthy"
     if score >= 50:
-        return "#8b6914", "Promising"
-    return "#6b2121", "Unworthy"
+        return _SCORE_AMBER, "#ffffff", "Promising"
+    return _SCORE_RED, "#e8cccc", "Unworthy"
 
 
 def _score_bar(score: int) -> str:
-    bg, label = _score_color(score)
-    width = max(score, 8)  # minimum visible width
+    bg, fg, label = _score_color(score)
+    width = max(score, 8)
     return (
-        f'<div style="background:#2a1f14;border-radius:6px;height:22px;'
-        f'width:200px;display:inline-block;vertical-align:middle;'
-        f'border:1px solid #5a4630;">'
-        f'<div style="background:{bg};border-radius:5px;height:22px;'
-        f'width:{width * 2}px;max-width:200px;line-height:22px;'
-        f'color:#1a1008;font-size:12px;font-weight:700;padding:0 8px;'
-        f'white-space:nowrap;">{score} &mdash; {label}</div></div>'
+        f'<div style="background:{_DIVIDER};border-radius:12px;height:24px;'
+        f'width:220px;display:inline-block;vertical-align:middle;">'
+        f'<div style="background:{bg};border-radius:12px;height:24px;'
+        f'width:{width * 2.2:.0f}px;max-width:220px;line-height:24px;'
+        f'color:{fg};font-size:12px;font-weight:700;padding:0 10px;'
+        f'white-space:nowrap;font-family:Georgia,serif;">'
+        f'{score} &mdash; {label}</div></div>'
     )
 
 
-def _badge(text: str, bg: str = "#6b2121", fg: str = "#f5e6c8") -> str:
+def _badge(text: str, bg: str, fg: str, border: str) -> str:
     return (
         f'<span style="display:inline-block;background:{bg};color:{fg};'
-        f'font-size:11px;font-weight:600;padding:2px 8px;border-radius:3px;'
-        f'margin:0 4px 4px 0;border:1px solid {fg}30;">{_esc(text)}</span>'
+        f'font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;'
+        f'margin:0 4px 4px 0;border:1px solid {border};">{_esc(text)}</span>'
     )
 
 
 def _skill_pill(text: str) -> str:
-    return _badge(text, bg="#1a1008", fg="#c9a84c")
+    return _badge(text, bg=_PILL_BG, fg=_TEXT_DARK, border=_PILL_BORDER)
 
 
 def _flag_pill(text: str) -> str:
-    return _badge(text, bg="#3d1111", fg="#e8a0a0")
+    return _badge(text, bg="#fdf2f2", fg=_SCORE_RED, border="#e8c4c4")
 
 
 def _render_job_row(job: dict[str, Any], rank: int) -> str:
@@ -68,14 +101,17 @@ def _render_job_row(job: dict[str, Any], rank: int) -> str:
 
     title = _esc(job.get("title", "Unknown"))
     company = _esc(job.get("company", "Unknown"))
-    location = _esc(job.get("location", "—"))
+    location = _esc(job.get("location", "\u2014"))
     url = _esc(job.get("url", "#"))
     source = _esc(job.get("source", ""))
     date_posted = _esc(job.get("date_posted", ""))
 
     skills_html = " ".join(_skill_pill(sk) for sk in matched[:8])
     if len(matched) > 8:
-        skills_html += f' <span style="color:#64748b;font-size:12px;">+{len(matched) - 8} more</span>'
+        skills_html += (
+            f' <span style="color:{_TEXT_MUTED};font-size:12px;font-style:italic;">'
+            f'+{len(matched) - 8} more</span>'
+        )
 
     flags_html = " ".join(_flag_pill(f) for f in flags) if flags else ""
 
@@ -91,63 +127,74 @@ def _render_job_row(job: dict[str, Any], rank: int) -> str:
     llm_html = ""
     if llm:
         rec = llm.get("recommendation", "")
-        # Fantasy-themed recommendation labels
-        rec_labels = {"Apply": "Pursue This Quest", "Maybe": "Investigate Further", "Skip": "Pass"}
+        rec_labels = {
+            "Apply": "Pursue This Quest",
+            "Maybe": "Investigate Further",
+            "Skip": "Pass",
+        }
         rec_label = rec_labels.get(rec, rec)
-        rec_colors = {"Apply": "#5a7a2e", "Maybe": "#8b6914", "Skip": "#6b2121"}
-        rec_color = rec_colors.get(rec, "#5a4630")
+        rec_colors = {
+            "Apply": _SCORE_GREEN,
+            "Maybe": _SCORE_AMBER,
+            "Skip": _SCORE_RED,
+        }
+        rec_color = rec_colors.get(rec, _TEXT_MUTED)
         llm_score = llm.get("llm_score", "?")
         strengths = llm.get("strengths", [])
         concerns = llm.get("concerns", [])
 
         rec_badge = (
-            f'<span style="display:inline-block;background:{rec_color};color:#f5e6c8;'
-            f'font-size:11px;font-weight:700;padding:3px 10px;border-radius:3px;'
-            f'margin-right:8px;border:1px solid #c9a84c40;'
-            f'font-family:Georgia,serif;letter-spacing:1px;">{_esc(rec_label)}</span>'
+            f'<span style="display:inline-block;background:{rec_color};color:#fff;'
+            f'font-size:11px;font-weight:700;padding:4px 12px;border-radius:4px;'
+            f'margin-right:8px;font-family:Georgia,serif;letter-spacing:0.5px;">'
+            f'{_esc(rec_label)}</span>'
         )
         llm_score_text = (
-            f'<span style="color:#5a4630;font-size:12px;font-style:italic;">'
+            f'<span style="color:{_TEXT_MUTED};font-size:12px;font-style:italic;">'
             f'Oracle rating: {llm_score}/10</span>'
         )
 
         detail_items = ""
         if strengths:
             detail_items += "".join(
-                f'<span style="color:#5a7a2e;font-size:12px;">&#9733; {_esc(s)}</span><br>'
+                f'<div style="color:{_SCORE_GREEN};font-size:12px;'
+                f'line-height:1.6;padding-left:4px;">'
+                f'&#9733; {_esc(s)}</div>'
                 for s in strengths[:3]
             )
         if concerns:
             detail_items += "".join(
-                f'<span style="color:#8b3a3a;font-size:12px;">&#9888; {_esc(c)}</span><br>'
+                f'<div style="color:{_SCORE_RED};font-size:12px;'
+                f'line-height:1.6;padding-left:4px;">'
+                f'&#9651; {_esc(c)}</div>'
                 for c in concerns[:3]
             )
 
         llm_html = (
-            f'<div style="margin-top:8px;padding:8px 12px;background:#e8dcc4;'
-            f'border-radius:3px;border:1px solid #c9a84c60;">'
+            f'<div style="margin-top:10px;padding:10px 14px;background:{_BG_IVORY};'
+            f'border-radius:6px;border:1px solid {_DIVIDER};">'
             f'{rec_badge}{llm_score_text}'
-            f'<div style="margin-top:6px;">{detail_items}</div>'
+            f'<div style="margin-top:8px;">{detail_items}</div>'
             f'</div>'
         )
 
     return f"""
-    <tr style="border-bottom:1px solid #c9a84c40;">
-      <td style="padding:16px;vertical-align:top;width:36px;color:#8b6914;
-                 font-size:20px;font-weight:700;text-align:center;
-                 font-family:Georgia,serif;">
+    <tr style="border-bottom:1px solid {_DIVIDER};">
+      <td style="padding:18px 12px;vertical-align:top;width:36px;
+                 color:{_GOLD};font-size:22px;font-weight:700;
+                 text-align:center;font-family:Georgia,serif;">
         {rank}
       </td>
-      <td style="padding:16px;">
-        <div style="margin-bottom:4px;">
-          <a href="{url}" style="color:#5a3000;font-size:16px;font-weight:700;
+      <td style="padding:18px 16px 18px 4px;">
+        <div style="margin-bottom:6px;">
+          <a href="{url}" style="color:{_TEXT_DARK};font-size:16px;font-weight:700;
                                   text-decoration:none;
                                   font-family:Georgia,serif;">{title}</a>
-          <span style="color:#6b5530;font-size:14px;margin-left:8px;
+          <span style="color:{_TEXT_MUTED};font-size:14px;margin-left:10px;
                        font-style:italic;">{company}</span>
         </div>
-        <div style="margin-bottom:6px;">{_score_bar(score)}</div>
-        <div style="color:#8b7355;font-size:13px;margin-bottom:6px;">{meta}</div>
+        <div style="margin-bottom:8px;">{_score_bar(score)}</div>
+        <div style="color:{_TEXT_MUTED};font-size:13px;margin-bottom:8px;">{meta}</div>
         <div style="margin-bottom:4px;">{skills_html}</div>
         {f'<div style="margin-top:6px;">{flags_html}</div>' if flags_html else ''}
         {llm_html}
@@ -159,17 +206,11 @@ def generate_digest(
     scored_jobs: list[dict[str, Any]],
     run_date: date | None = None,
 ) -> str:
-    """Return an HTML email body for the given scored job list.
-
-    *scored_jobs* should already contain ``_score`` dicts (as produced by
-    ``scorer.score_jobs``).  They are re-sorted by score descending here for
-    safety.
-    """
+    """Return an HTML email body for the given scored job list."""
     today = run_date or date.today()
     date_str = today.strftime("%B %d, %Y")
     total = len(scored_jobs)
 
-    # Sort descending by score
     jobs = sorted(
         scored_jobs,
         key=lambda j: j.get("_score", {}).get("score", 0),
@@ -180,64 +221,53 @@ def generate_digest(
     strong = sum(1 for j in jobs if j.get("_score", {}).get("score", 0) >= 70)
     moderate = sum(1 for j in jobs if 50 <= j.get("_score", {}).get("score", 0) < 70)
 
-    # Build job rows
     rows_html = "\n".join(_render_job_row(j, i + 1) for i, j in enumerate(top))
 
-    # SVG hawk coat of arms — a heraldic hawk on a shield
+    # SVG hawk coat of arms — heraldic hawk on a shield, ivory/gold on dark
     hawk_crest = (
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" '
-        'width="120" height="144" style="display:block;margin:0 auto 8px;">'
-        # Shield shape
+        'width="100" height="120" style="display:block;margin:0 auto 12px;">'
+        # Shield
         '<path d="M100 8 L188 50 L188 140 Q188 200 100 232 Q12 200 12 140 L12 50 Z" '
-        'fill="#1a1008" stroke="#c9a84c" stroke-width="4"/>'
-        # Inner shield border
-        '<path d="M100 20 L178 56 L178 138 Q178 192 100 222 Q22 192 22 138 L22 56 Z" '
-        'fill="none" stroke="#8b6914" stroke-width="1.5" stroke-dasharray="4,3"/>'
-        # Diagonal cross / saltire behind hawk
-        '<line x1="45" y1="50" x2="155" y2="190" stroke="#2a1f14" stroke-width="18"/>'
-        '<line x1="155" y1="50" x2="45" y2="190" stroke="#2a1f14" stroke-width="18"/>'
+        f'fill="{_BG_HEADER}" stroke="{_GOLD}" stroke-width="3.5"/>'
+        # Inner border
+        '<path d="M100 22 L176 58 L176 138 Q176 192 100 220 Q24 192 24 138 L24 58 Z" '
+        f'fill="none" stroke="{_GOLD}" stroke-width="0.8" opacity="0.4"/>'
         # Hawk body
-        '<path d="M100 55 Q115 58 120 72 L125 90 Q130 105 125 115 '
-        'L115 135 Q110 145 100 150 Q90 145 85 135 L75 115 Q70 105 75 90 '
-        'L80 72 Q85 58 100 55 Z" fill="#c9a84c" stroke="#8b6914" stroke-width="1.5"/>'
+        '<path d="M100 58 Q114 61 118 74 L122 90 Q126 104 122 113 '
+        'L113 132 Q108 142 100 147 Q92 142 87 132 L78 113 Q74 104 78 90 '
+        f'L82 74 Q86 61 100 58 Z" fill="{_GOLD}" stroke="{_GOLD_LIGHT}" stroke-width="1"/>'
         # Head
-        '<circle cx="100" cy="62" r="14" fill="#c9a84c" stroke="#8b6914" stroke-width="1.5"/>'
+        f'<circle cx="100" cy="65" r="13" fill="{_GOLD}" stroke="{_GOLD_LIGHT}" stroke-width="1"/>'
         # Beak
-        '<path d="M100 65 L107 72 L100 70 L93 72 Z" fill="#5a4630"/>'
+        f'<path d="M100 68 L106 74 L100 72 L94 74 Z" fill="{_BG_HEADER}"/>'
         # Eyes
-        '<circle cx="94" cy="59" r="2.5" fill="#1a1008"/>'
-        '<circle cx="106" cy="59" r="2.5" fill="#1a1008"/>'
-        '<circle cx="94.5" cy="58.5" r="0.8" fill="#c9a84c"/>'
-        '<circle cx="106.5" cy="58.5" r="0.8" fill="#c9a84c"/>'
-        # Left wing spread
-        '<path d="M80 85 Q55 65 30 70 Q38 80 50 90 Q40 85 25 88 '
-        'Q38 98 55 100 Q45 100 35 105 Q50 110 70 108 L75 100 Z" '
-        'fill="#c9a84c" stroke="#8b6914" stroke-width="1"/>'
-        # Right wing spread
-        '<path d="M120 85 Q145 65 170 70 Q162 80 150 90 Q160 85 175 88 '
-        'Q162 98 145 100 Q155 100 165 105 Q150 110 130 108 L125 100 Z" '
-        'fill="#c9a84c" stroke="#8b6914" stroke-width="1"/>'
-        # Wing feather details
-        '<path d="M65 88 L50 82" stroke="#8b6914" stroke-width="0.7"/>'
-        '<path d="M58 95 L42 92" stroke="#8b6914" stroke-width="0.7"/>'
-        '<path d="M135 88 L150 82" stroke="#8b6914" stroke-width="0.7"/>'
-        '<path d="M142 95 L158 92" stroke="#8b6914" stroke-width="0.7"/>'
-        # Tail feathers
-        '<path d="M90 148 L82 175 Q100 168 100 168 Q100 168 118 175 L110 148 Z" '
-        'fill="#c9a84c" stroke="#8b6914" stroke-width="1"/>'
-        '<line x1="92" y1="150" x2="88" y2="170" stroke="#8b6914" stroke-width="0.7"/>'
-        '<line x1="100" y1="150" x2="100" y2="168" stroke="#8b6914" stroke-width="0.7"/>'
-        '<line x1="108" y1="150" x2="112" y2="170" stroke="#8b6914" stroke-width="0.7"/>'
-        # Talons
-        '<path d="M90 148 L85 155 L83 152" stroke="#5a4630" stroke-width="1.5" fill="none"/>'
-        '<path d="M110 148 L115 155 L117 152" stroke="#5a4630" stroke-width="1.5" fill="none"/>'
-        # Crown / crest on head
-        '<path d="M92 50 L95 42 L98 48 L100 40 L102 48 L105 42 L108 50" '
-        'fill="none" stroke="#c9a84c" stroke-width="1.5"/>'
-        '<circle cx="100" cy="39" r="2" fill="#c9a84c"/>'
-        # Corner ornaments on shield
-        '<path d="M40 55 Q50 50 55 55 Q50 60 40 55 Z" fill="#8b6914" opacity="0.5"/>'
-        '<path d="M160 55 Q150 50 145 55 Q150 60 160 55 Z" fill="#8b6914" opacity="0.5"/>'
+        f'<circle cx="95" cy="62" r="2" fill="{_BG_HEADER}"/>'
+        f'<circle cx="105" cy="62" r="2" fill="{_BG_HEADER}"/>'
+        f'<circle cx="95.4" cy="61.5" r="0.7" fill="{_GOLD_LIGHT}"/>'
+        f'<circle cx="105.4" cy="61.5" r="0.7" fill="{_GOLD_LIGHT}"/>'
+        # Left wing
+        '<path d="M82 88 Q58 70 34 74 Q42 83 52 92 Q43 88 30 91 '
+        f'Q42 100 58 102 Q48 102 38 107 Q52 112 72 108 L78 100 Z" '
+        f'fill="{_GOLD}" stroke="{_GOLD_LIGHT}" stroke-width="0.8"/>'
+        # Right wing
+        '<path d="M118 88 Q142 70 166 74 Q158 83 148 92 Q157 88 170 91 '
+        f'Q158 100 142 102 Q152 102 162 107 Q148 112 128 108 L122 100 Z" '
+        f'fill="{_GOLD}" stroke="{_GOLD_LIGHT}" stroke-width="0.8"/>'
+        # Wing details
+        f'<path d="M67 90 L53 85" stroke="{_GOLD_LIGHT}" stroke-width="0.5" opacity="0.6"/>'
+        f'<path d="M60 97 L45 94" stroke="{_GOLD_LIGHT}" stroke-width="0.5" opacity="0.6"/>'
+        f'<path d="M133 90 L147 85" stroke="{_GOLD_LIGHT}" stroke-width="0.5" opacity="0.6"/>'
+        f'<path d="M140 97 L155 94" stroke="{_GOLD_LIGHT}" stroke-width="0.5" opacity="0.6"/>'
+        # Tail
+        '<path d="M92 145 L84 172 Q100 165 100 165 Q100 165 116 172 L108 145 Z" '
+        f'fill="{_GOLD}" stroke="{_GOLD_LIGHT}" stroke-width="0.8"/>'
+        f'<line x1="100" y1="147" x2="100" y2="165" stroke="{_GOLD_LIGHT}" '
+        'stroke-width="0.5" opacity="0.6"/>'
+        # Crown
+        '<path d="M93 53 L96 46 L98 51 L100 44 L102 51 L104 46 L107 53" '
+        f'fill="none" stroke="{_GOLD_LIGHT}" stroke-width="1.2"/>'
+        f'<circle cx="100" cy="43" r="1.5" fill="{_GOLD_LIGHT}"/>'
         '</svg>'
     )
 
@@ -245,81 +275,78 @@ def generate_digest(
 <!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"></head>
-<body style="margin:0;padding:0;background:#0d0906;font-family:
+<body style="margin:0;padding:0;background:{_BG_IVORY};font-family:
   Georgia,'Times New Roman',Times,serif;">
 
-  <!-- Parchment wrapper -->
-  <div style="max-width:700px;margin:0 auto;padding:24px 16px;">
+  <div style="max-width:680px;margin:0 auto;padding:24px 16px;">
 
-    <!-- Header — dark fantasy banner -->
-    <div style="background:linear-gradient(180deg,#1a1008 0%,#2a1f14 50%,#1a1008 100%);
-                border-radius:4px;padding:32px 32px 24px;color:#f5e6c8;
-                margin-bottom:2px;text-align:center;
-                border:2px solid #5a4630;
-                box-shadow:inset 0 0 60px rgba(0,0,0,0.5);">
+    <!-- Header -->
+    <div style="background:{_BG_HEADER};border-radius:8px 8px 0 0;
+                padding:36px 32px 28px;color:#f5efe6;text-align:center;">
 
-      <!-- Coat of Arms -->
       {hawk_crest}
 
-      <h1 style="margin:4px 0 0;font-size:28px;font-weight:400;
-                 letter-spacing:6px;text-transform:uppercase;
-                 color:#c9a84c;font-family:Georgia,'Times New Roman',serif;">
+      <h1 style="margin:0;font-size:26px;font-weight:400;
+                 letter-spacing:8px;text-transform:uppercase;
+                 color:{_GOLD_LIGHT};">
         The Hawk
       </h1>
       <div style="font-size:11px;letter-spacing:4px;text-transform:uppercase;
-                  color:#8b6914;margin-bottom:4px;">
-        &mdash; Quest Board &mdash;
+                  color:{_GOLD};margin:2px 0 6px;opacity:0.8;">
+        Quest Board
       </div>
-      <div style="font-size:13px;color:#a08860;font-style:italic;">
+      <div style="font-size:13px;color:#c4b49a;font-style:italic;">
         &ldquo;Sharp eyes find the finest quarry.&rdquo;
       </div>
-      <div style="font-size:12px;color:#6b5530;margin-top:8px;">
+
+      <!-- Divider -->
+      <div style="margin:18px auto 16px;width:240px;height:1px;
+                  background:linear-gradient(90deg,transparent,{_GOLD}80,transparent);">
+      </div>
+
+      <!-- Stats -->
+      <table cellpadding="0" cellspacing="0" border="0"
+             style="margin:0 auto;border-spacing:12px;">
+        <tr>
+          <td style="background:rgba(255,255,255,0.06);border:1px solid {_GOLD}40;
+                     border-radius:6px;padding:12px 24px;text-align:center;">
+            <div style="font-size:28px;font-weight:700;color:{_GOLD_LIGHT};
+                        font-family:Georgia,serif;">{total}</div>
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;
+                        color:{_GOLD};opacity:0.7;margin-top:2px;">Quests</div>
+          </td>
+          <td style="background:rgba(255,255,255,0.06);border:1px solid {_GOLD}40;
+                     border-radius:6px;padding:12px 24px;text-align:center;">
+            <div style="font-size:28px;font-weight:700;color:{_GOLD_LIGHT};
+                        font-family:Georgia,serif;">{strong}</div>
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;
+                        color:{_GOLD};opacity:0.7;margin-top:2px;">Worthy</div>
+          </td>
+          <td style="background:rgba(255,255,255,0.06);border:1px solid {_GOLD}40;
+                     border-radius:6px;padding:12px 24px;text-align:center;">
+            <div style="font-size:28px;font-weight:700;color:{_GOLD_LIGHT};
+                        font-family:Georgia,serif;">{moderate}</div>
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;
+                        color:{_GOLD};opacity:0.7;margin-top:2px;">Promising</div>
+          </td>
+        </tr>
+      </table>
+
+      <div style="font-size:12px;color:{_GOLD};opacity:0.5;margin-top:14px;">
         {date_str}
-      </div>
-
-      <!-- Ornamental divider -->
-      <div style="margin:16px auto 16px;width:300px;height:1px;
-                  background:linear-gradient(90deg,transparent,#c9a84c,transparent);">
-      </div>
-
-      <!-- Stats as heraldic plaques -->
-      <div style="display:flex;gap:12px;justify-content:center;">
-        <div style="background:#0d0906;border:1px solid #5a4630;border-radius:3px;
-                    padding:10px 20px;text-align:center;">
-          <div style="font-size:28px;font-weight:700;color:#c9a84c;
-                      font-family:Georgia,serif;">{total}</div>
-          <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;
-                      color:#8b6914;">Quests Found</div>
-        </div>
-        <div style="background:#0d0906;border:1px solid #5a4630;border-radius:3px;
-                    padding:10px 20px;text-align:center;">
-          <div style="font-size:28px;font-weight:700;color:#c9a84c;
-                      font-family:Georgia,serif;">{strong}</div>
-          <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;
-                      color:#8b6914;">Worthy (70+)</div>
-        </div>
-        <div style="background:#0d0906;border:1px solid #5a4630;border-radius:3px;
-                    padding:10px 20px;text-align:center;">
-          <div style="font-size:28px;font-weight:700;color:#c9a84c;
-                      font-family:Georgia,serif;">{moderate}</div>
-          <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;
-                      color:#8b6914;">Promising (50-69)</div>
-        </div>
       </div>
     </div>
 
-    <!-- Top Matches — parchment scroll -->
-    <div style="background:linear-gradient(180deg,#f5e6c8,#efe0c0,#f5e6c8);
-                border-radius:2px;overflow:hidden;
-                border:2px solid #5a4630;
-                box-shadow:0 4px 12px rgba(0,0,0,0.4);">
-      <div style="padding:18px 24px;
-                  border-bottom:2px solid #c9a84c;
-                  background:linear-gradient(90deg,#efe0c0,#f5e6c8,#efe0c0);">
-        <h2 style="margin:0;font-size:17px;color:#2a1f14;text-align:center;
-                   font-family:Georgia,serif;letter-spacing:2px;
+    <!-- Quest list -->
+    <div style="background:{_CARD_BG};overflow:hidden;
+                border-left:1px solid {_DIVIDER};
+                border-right:1px solid {_DIVIDER};">
+      <div style="padding:16px 24px;border-bottom:1px solid {_DIVIDER};
+                  background:{_BG_IVORY};">
+        <h2 style="margin:0;font-size:15px;color:{_TEXT_DARK};text-align:center;
+                   font-family:Georgia,serif;letter-spacing:3px;
                    text-transform:uppercase;">
-          &#9876; Top {min(TOP_N, total)} Quests &#9876;
+          &#9876;&ensp;Top {min(TOP_N, total)} Quests&ensp;&#9876;
         </h2>
       </div>
       <table style="width:100%;border-collapse:collapse;">
@@ -329,19 +356,17 @@ def generate_digest(
       </table>
     </div>
 
-    <!-- Footer — dark parchment -->
-    <div style="text-align:center;padding:20px 0 8px;font-size:12px;
-                color:#5a4630;">
-      <div style="margin:12px auto;width:200px;height:1px;
-                  background:linear-gradient(90deg,transparent,#5a4630,transparent);">
+    <!-- Footer -->
+    <div style="background:{_BG_HEADER};border-radius:0 0 8px 8px;
+                padding:16px 24px;text-align:center;">
+      <div style="font-size:11px;letter-spacing:3px;color:{_GOLD};
+                  opacity:0.6;font-family:Georgia,serif;">
+        THE HAWK &middot; {date_str}
       </div>
-      <span style="letter-spacing:2px;font-family:Georgia,serif;">
-        THE HAWK &middot; Quest Board &middot; {date_str}
-      </span>
-      <br>
-      <span style="font-size:10px;color:#3d2c1a;font-style:italic;">
+      <div style="font-size:10px;color:{_GOLD};opacity:0.35;
+                  font-style:italic;margin-top:4px;">
         By order of the realm, delivered by raven at dawn
-      </span>
+      </div>
     </div>
 
   </div>
