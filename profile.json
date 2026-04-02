@@ -314,27 +314,49 @@
   "resume_context": "Nadine Beckwith is a Senior Software Engineer with 10+ years of experience at Amazon (6 years across 2 roles), Chewy (3 years), and Federated Investors (3 years). Education: IT degree from Point Park University, History degree from Cal U of PA. At Chewy, she built event-driven ingestion pipelines (S3/Lambda/Terraform), migrated analytics from Vertica to Snowflake, led zero-downtime RDS migrations across AWS accounts, owned large-scale React/TypeScript UI components, designed org-based access control, supported robotics fulfillment launches (<0.1% defect rate), and led shared React component pattern adoption. At Amazon (SDE II), she designed scalable data visualization apps in Amazon's metrics platform, led end-to-end COVID-19 social distancing dashboard development (delivered in 2 weeks), worked with international legal on privacy compliance, and mentored an L4 to L5 promotion. At Amazon (Program Developer), she built defect monitoring dashboards and productivity tracking tools. At Federated Investors, she built SSRS/VBA reporting solutions, automated batch workflows, and maintained SEC compliance. Core strengths: full-stack development (React/TypeScript/Java/Python), cloud infrastructure (AWS — S3, Lambda, SNS, SQS, IAM, KMS, Terraform), data platform engineering (Snowflake, Vertica, PostgreSQL, ETL), production operations, access control systems, and delivering under tight timelines in regulated environments.",
   "preferences": {
     "work_arrangement": [
-      "remote",
-      "hybrid"
+      "remote"
     ],
     "locations": [
       "Roberts, WI",
-      "Minneapolis, MN",
-      "St. Paul, MN",
       "Hudson, WI",
-      "Woodbury, MN",
+      "Hammond, WI",
+      "Woodville, WI",
+      "New Richmond, WI",
+      "Baldwin, WI",
+      "Somerset, WI",
+      "River Falls, WI",
+      "Star Prairie, WI",
+      "Glenwood City, WI",
       "Stillwater, MN",
-      "Eau Claire, WI",
-      "Madison, WI"
+      "Bayport, MN",
+      "Oak Park Heights, MN",
+      "Lake Elmo, MN",
+      "Oakdale, MN",
+      "Woodbury, MN",
+      "Lakeland, MN",
+      "Afton, MN",
+      "Mahtomedi, MN"
     ],
     "company_size": [
-      "mid-size",
-      "enterprise"
+      "startup",
+      "small",
+      "mid-size"
+    ],
+    "ideal_employee_count": "under 1000, ideally around 100",
+    "priority_industries": [
+      "financial services",
+      "fintech",
+      "banking",
+      "investing",
+      "accounting"
     ]
   },
   "dealbreakers": [
     "junior scope",
     "contract under 6 months",
-    "unpaid or equity-only compensation"
+    "unpaid or equity-only compensation",
+    "politics or political organizations",
+    "press or media organizations",
+    "FAANG or big tech companies"
   ]
 }

@@ -1,611 +1,352 @@
 [
   {
-    "name": "Zillow",
-    "ats_type": "workday",
-    "careers_url": "https://zillow.wd5.myworkdayjobs.com/Zillow_Group_External",
-    "location": "Seattle, WA",
-    "notes": "Remote-flexible (Cloud HQ model, 97% remote eligible). E-commerce/marketplace."
-  },
-  {
-    "name": "Redfin",
-    "ats_type": "workday",
-    "careers_url": "https://redfin.wd1.myworkdayjobs.com/redfin_careers",
-    "location": "Seattle, WA",
-    "notes": "Part of Rocket Companies. Real estate tech platform."
-  },
-  {
-    "name": "Expedia Group",
-    "ats_type": "workday",
-    "careers_url": "https://expedia.wd108.myworkdayjobs.com/search",
-    "location": "Seattle, WA",
-    "notes": "Large travel e-commerce platform. Multiple brands."
-  },
-  {
-    "name": "T-Mobile",
-    "ats_type": "workday",
-    "careers_url": "https://careers.t-mobile.com/jobs",
-    "location": "Bellevue, WA",
-    "notes": "Enterprise telecom. Large product org."
-  },
-  {
-    "name": "Nordstrom",
-    "ats_type": "workday",
-    "careers_url": "https://nordstrom.wd501.myworkdayjobs.com/nordstrom_careers",
-    "location": "Seattle, WA",
-    "notes": "Retail/e-commerce. Strong digital product teams."
-  },
-  {
-    "name": "Smartsheet",
+    "name": "Brex",
     "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/smartsheet",
-    "location": "Bellevue, WA",
-    "notes": "SaaS work management platform. Hybrid/remote options."
-  },
-  {
-    "name": "Qualtrics",
-    "ats_type": "greenhouse",
-    "careers_url": "https://www.qualtrics.com/careers/us/en",
-    "location": "Seattle, WA",
-    "notes": "Enterprise SaaS, experience management. Strong analytics/data focus."
-  },
-  {
-    "name": "GitLab",
-    "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/gitlab",
+    "careers_url": "https://job-boards.greenhouse.io/brex",
     "location": "Remote",
-    "notes": "All-remote company (65+ countries). DevSecOps platform."
+    "notes": "Fintech. Corporate cards and spend management. ~1000 employees."
   },
   {
-    "name": "Stripe",
+    "name": "Mercury",
     "ats_type": "greenhouse",
-    "careers_url": "https://stripe.com/jobs/search",
-    "location": "Seattle, WA / Remote",
-    "notes": "Fintech/payments platform. Seattle hub + remote roles."
-  },
-  {
-    "name": "Shopify",
-    "ats_type": "lever",
-    "careers_url": "https://www.shopify.com/careers",
+    "careers_url": "https://job-boards.greenhouse.io/mercury",
     "location": "Remote",
-    "notes": "Digital-by-default (remote-first). E-commerce platform leader."
+    "notes": "Fintech. Banking for startups. ~500 employees."
   },
   {
-    "name": "HubSpot",
-    "ats_type": "greenhouse",
-    "careers_url": "https://www.hubspot.com/careers/jobs/all",
-    "location": "Remote",
-    "notes": "Enterprise SaaS CRM. Hybrid/remote. Consistently top-rated employer."
-  },
-  {
-    "name": "Coinbase",
-    "ats_type": "greenhouse",
-    "careers_url": "https://www.coinbase.com/careers/positions",
-    "location": "Remote",
-    "notes": "Remote-first. Crypto/fintech. Compliance and GRC focus."
-  },
-  {
-    "name": "Datadog",
-    "ats_type": "greenhouse",
-    "careers_url": "https://careers.datadoghq.com/all-jobs/",
-    "location": "Remote / Hybrid",
-    "notes": "SaaS observability platform. Strong analytics/instrumentation fit."
-  },
-  {
-    "name": "Cloudflare",
-    "ats_type": "greenhouse",
-    "careers_url": "https://www.cloudflare.com/careers/jobs/",
-    "location": "Remote / Hybrid",
-    "notes": "Enterprise infrastructure/security SaaS. High growth."
-  },
-  {
-    "name": "Chewy",
-    "ats_type": "workday",
-    "careers_url": "https://careers.chewy.com/us/en/search-results",
-    "location": "Bellevue, WA / Remote",
-    "notes": "E-commerce. Former employer — strong network advantage."
-  },
-  {
-    "name": "Outreach",
-    "ats_type": "lever",
-    "careers_url": "https://jobs.lever.co/outreach",
-    "location": "Seattle, WA",
-    "notes": "Sales engagement SaaS. Series D+, Seattle HQ."
-  },
-  {
-    "name": "Highspot",
-    "ats_type": "lever",
-    "careers_url": "https://jobs.lever.co/highspot",
-    "location": "Seattle, WA",
-    "notes": "Sales enablement SaaS, AI/ML-powered platform. Hybrid."
-  },
-  {
-    "name": "Rover",
-    "ats_type": "lever",
-    "careers_url": "https://jobs.lever.co/rover",
-    "location": "Seattle, WA",
-    "notes": "Pet marketplace. Hybrid (Mon/Thu in-office). Consumer + platform."
-  },
-  {
-    "name": "OfferUp",
-    "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/offerup",
-    "location": "Seattle, WA",
-    "notes": "Local commerce marketplace. 100M+ downloads. E-commerce."
-  },
-  {
-    "name": "Okta",
-    "ats_type": "greenhouse",
-    "careers_url": "https://boards.greenhouse.io/okta",
-    "location": "Seattle, WA / Remote",
-    "notes": "Enterprise identity/security SaaS. Compliance and GRC alignment."
-  },
-  {
-    "name": "Twilio",
-    "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/twilio",
-    "location": "Seattle, WA / Remote",
-    "notes": "Enterprise communications platform SaaS. Segment acquisition (analytics)."
-  },
-  {
-    "name": "Figma",
-    "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/figma",
-    "location": "Remote / Hybrid",
-    "notes": "Design platform SaaS. Product-led growth. Strong product org."
-  },
-  {
-    "name": "Notion",
+    "name": "Ramp",
     "ats_type": "ashby",
-    "careers_url": "https://jobs.ashbyhq.com/notion",
-    "location": "Remote / Hybrid",
-    "notes": "Productivity SaaS. Product-led growth. AI-focused roadmap."
-  },
-  {
-    "name": "Zapier",
-    "ats_type": "ashby",
-    "careers_url": "https://jobs.ashbyhq.com/zapier",
+    "careers_url": "https://jobs.ashbyhq.com/ramp",
     "location": "Remote",
-    "notes": "All-remote. Automation platform SaaS. Product-led growth."
+    "notes": "Fintech. Corporate card and spend management. ~800 employees."
   },
   {
-    "name": "Samsara",
-    "ats_type": "greenhouse",
-    "careers_url": "https://boards.greenhouse.io/samsara",
-    "location": "Seattle, WA / Remote",
-    "notes": "IoT/operations SaaS. Data platform, analytics, AI/ML focus."
-  },
-  {
-    "name": "DoorDash",
-    "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/doordashusa",
-    "location": "Seattle, WA / Remote",
-    "notes": "E-commerce/logistics marketplace. Strong platform product org."
-  },
-  {
-    "name": "Instacart",
-    "ats_type": "greenhouse",
-    "careers_url": "https://www.instacart.careers/current-openings",
+    "name": "Plaid",
+    "ats_type": "lever",
+    "careers_url": "https://jobs.lever.co/plaid",
     "location": "Remote",
-    "notes": "E-commerce/grocery marketplace. Ad platform, analytics."
+    "notes": "Fintech. Financial data infrastructure. ~900 employees."
   },
   {
-    "name": "Amplitude",
+    "name": "Column",
     "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/amplitude",
-    "location": "Remote / Hybrid",
-    "notes": "Analytics SaaS platform. Perfect instrumentation/data-driven fit."
-  },
-  {
-    "name": "Braze",
-    "ats_type": "greenhouse",
-    "careers_url": "https://www.braze.com/company/careers",
-    "location": "Remote / Hybrid",
-    "notes": "Customer engagement SaaS. Data-driven, enterprise."
-  },
-  {
-    "name": "OneTrust",
-    "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/onetrust",
-    "location": "Remote / Hybrid",
-    "notes": "Privacy/compliance/GRC SaaS. Direct compliance and GRC match."
-  },
-  {
-    "name": "Drata",
-    "ats_type": "ashby",
-    "careers_url": "https://jobs.ashbyhq.com/drata",
+    "careers_url": "https://job-boards.greenhouse.io/column",
     "location": "Remote",
-    "notes": "Compliance automation SaaS (SOC2, GRC). Strong compliance fit."
+    "notes": "Fintech. Developer-first bank infrastructure. ~100 employees."
   },
   {
-    "name": "Grafana Labs",
-    "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/grafanalabs",
+    "name": "Moov Financial",
+    "ats_type": "lever",
+    "careers_url": "https://jobs.lever.co/moov",
     "location": "Remote",
-    "notes": "Observability/analytics SaaS. All-remote. Instrumentation fit."
+    "notes": "Fintech. Payment infrastructure API. ~50 employees."
   },
   {
-    "name": "Webflow",
+    "name": "Stessa",
     "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/webflow",
+    "careers_url": "https://job-boards.greenhouse.io/stessa",
     "location": "Remote",
-    "notes": "No-code web platform SaaS. Product-led growth."
+    "notes": "Fintech. Real estate financial management. Small team."
   },
   {
-    "name": "MongoDB",
-    "ats_type": "greenhouse",
-    "careers_url": "https://www.mongodb.com/careers/departments",
-    "location": "Seattle, WA / Remote",
-    "notes": "Enterprise database platform. SaaS (Atlas). Large product org."
-  },
-  {
-    "name": "Flexport",
-    "ats_type": "greenhouse",
-    "careers_url": "https://www.flexport.com/careers/jobs/",
-    "location": "Bellevue, WA / Remote",
-    "notes": "Supply chain/logistics platform. Acquired Convoy assets. Seattle presence."
+    "name": "Heron Finance",
+    "ats_type": "lever",
+    "careers_url": "https://jobs.lever.co/heronfinance",
+    "location": "Remote",
+    "notes": "Fintech. Lending platform. Small team."
   },
   {
     "name": "Vanta",
     "ats_type": "ashby",
     "careers_url": "https://jobs.ashbyhq.com/vanta",
     "location": "Remote",
-    "notes": "Compliance/security automation (SOC2, ISO 27001). GRC fit. $400M ARR."
+    "notes": "Security/compliance automation. ~500 employees."
   },
   {
-    "name": "Ramp",
-    "ats_type": "ashby",
-    "careers_url": "https://jobs.ashbyhq.com/ramp",
-    "location": "Remote / Hybrid",
-    "notes": "Corporate card/spend management fintech. High growth, data-driven."
-  },
-  {
-    "name": "Linear",
-    "ats_type": "ashby",
-    "careers_url": "https://jobs.ashbyhq.com/Linear",
+    "name": "Drata",
+    "ats_type": "greenhouse",
+    "careers_url": "https://job-boards.greenhouse.io/drata",
     "location": "Remote",
-    "notes": "Project management SaaS. Fully remote since founding. Product-led growth."
-  },
-  {
-    "name": "Plaid",
-    "ats_type": "lever",
-    "careers_url": "https://jobs.lever.co/plaid",
-    "location": "Remote / Hybrid",
-    "notes": "Fintech data platform. API-first. Strong platform product org."
-  },
-  {
-    "name": "Canva",
-    "ats_type": "lever",
-    "careers_url": "https://jobs.lever.co/canva",
-    "location": "Remote",
-    "notes": "Design platform. 170M+ users. Product-led growth, global."
-  },
-  {
-    "name": "Affirm",
-    "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/affirm",
-    "location": "Remote",
-    "notes": "Fintech BNPL. Remote-first. Strong product & compliance org."
-  },
-  {
-    "name": "PagerDuty",
-    "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/pagerduty",
-    "location": "Remote / Hybrid",
-    "notes": "Enterprise operations/incident SaaS. AI-driven platform."
-  },
-  {
-    "name": "1Password",
-    "ats_type": "ashby",
-    "careers_url": "https://jobs.ashbyhq.com/1password",
-    "location": "Remote",
-    "notes": "Security/identity SaaS. Forbes Cloud 100. $400M+ ARR."
-  },
-  {
-    "name": "Airtable",
-    "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/airtable",
-    "location": "Remote / Hybrid",
-    "notes": "No-code platform SaaS. Product-led growth. Enterprise expansion."
-  },
-  {
-    "name": "Asana",
-    "ats_type": "greenhouse",
-    "careers_url": "https://asana.com/jobs/all",
-    "location": "Remote / Hybrid",
-    "notes": "Work management SaaS. 170K+ customers. AI collaboration platform."
-  },
-  {
-    "name": "Lattice",
-    "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/embed/job_board?for=lattice",
-    "location": "Remote / Hybrid",
-    "notes": "People management/HR SaaS. Performance, engagement, analytics."
-  },
-  {
-    "name": "Gusto",
-    "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/gusto",
-    "location": "Remote / Hybrid",
-    "notes": "HR/payroll SaaS for SMBs. Platform, compliance focus."
-  },
-  {
-    "name": "Calendly",
-    "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/calendly",
-    "location": "Remote",
-    "notes": "Scheduling SaaS. Product-led growth. Self-serve + enterprise."
-  },
-  {
-    "name": "Miro",
-    "ats_type": "greenhouse",
-    "careers_url": "https://miro.com/careers/",
-    "location": "Remote / Hybrid",
-    "notes": "Collaboration/whiteboard SaaS. 100M users. Innovation workspace."
-  },
-  {
-    "name": "Duolingo",
-    "ats_type": "greenhouse",
-    "careers_url": "https://boards.greenhouse.io/duolingo",
-    "location": "Remote / Hybrid",
-    "notes": "EdTech SaaS. AI-driven product. Strong data/ML culture."
-  },
-  {
-    "name": "LaunchDarkly",
-    "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/launchdarkly",
-    "location": "Remote",
-    "notes": "Feature management platform SaaS. Developer tools, enterprise."
-  },
-  {
-    "name": "Vercel",
-    "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/vercel",
-    "location": "Remote / Hybrid",
-    "notes": "Developer platform (Next.js). Product-led growth. AI SDK."
-  },
-  {
-    "name": "Retool",
-    "ats_type": "greenhouse",
-    "careers_url": "https://retool.com/careers",
-    "location": "Hybrid",
-    "notes": "Internal tools platform SaaS. Developer + enterprise audience."
-  },
-  {
-    "name": "Snyk",
-    "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/snyk",
-    "location": "Remote / Hybrid",
-    "notes": "Developer security SaaS. Compliance, vulnerability management."
-  },
-  {
-    "name": "Tailscale",
-    "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/tailscale",
-    "location": "Remote",
-    "notes": "Networking/VPN SaaS. Fully remote (US/CA/UK). Developer-first."
-  },
-  {
-    "name": "dbt Labs",
-    "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/dbtlabsinc",
-    "location": "Remote",
-    "notes": "Analytics engineering SaaS. Remote-first. Data platform."
-  },
-  {
-    "name": "Databricks",
-    "ats_type": "greenhouse",
-    "careers_url": "https://www.databricks.com/company/careers/open-positions",
-    "location": "Remote / Hybrid",
-    "notes": "Data + AI platform. Enterprise. Large product org."
-  },
-  {
-    "name": "Deel",
-    "ats_type": "ashby",
-    "careers_url": "https://jobs.ashbyhq.com/deel",
-    "location": "Remote",
-    "notes": "Global HR/payroll platform. 7K employees, 150+ countries. Compliance."
-  },
-  {
-    "name": "PostHog",
-    "ats_type": "ashby",
-    "careers_url": "https://jobs.ashbyhq.com/posthog",
-    "location": "Remote",
-    "notes": "Product analytics/feature flags SaaS. Open source. Instrumentation fit."
-  },
-  {
-    "name": "Supabase",
-    "ats_type": "ashby",
-    "careers_url": "https://jobs.ashbyhq.com/supabase",
-    "location": "Remote",
-    "notes": "Open source database platform. Developer-first. Product-led growth."
-  },
-  {
-    "name": "Loom",
-    "ats_type": "lever",
-    "careers_url": "https://jobs.lever.co/useloom",
-    "location": "Remote",
-    "notes": "Async video communication SaaS. Acquired by Atlassian."
-  },
-  {
-    "name": "Reddit",
-    "ats_type": "ashby",
-    "careers_url": "https://jobs.ashbyhq.com/reddit",
-    "location": "Remote / Hybrid",
-    "notes": "Social platform. Large-scale community, ads, e-commerce."
+    "notes": "Security/compliance automation. ~400 employees."
   },
   {
     "name": "Metabase",
     "ats_type": "lever",
     "careers_url": "https://jobs.lever.co/metabase",
     "location": "Remote",
-    "notes": "Open source BI/analytics SaaS. Fully distributed. Data-driven."
+    "notes": "Open-source BI/analytics. ~100 employees."
   },
   {
-    "name": "Mistral AI",
-    "ats_type": "lever",
-    "careers_url": "https://jobs.lever.co/mistral",
-    "location": "Remote / Hybrid",
-    "notes": "AI/ML foundation models. Fast-growing AI company."
-  },
-  {
-    "name": "Remote.com",
-    "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/remotecom",
+    "name": "PostHog",
+    "ats_type": "ashby",
+    "careers_url": "https://jobs.ashbyhq.com/posthog",
     "location": "Remote",
-    "notes": "Global HR/employer-of-record platform. Fully distributed."
+    "notes": "Open-source product analytics. ~80 employees."
   },
   {
-    "name": "Atlassian",
+    "name": "Linear",
+    "ats_type": "ashby",
+    "careers_url": "https://jobs.ashbyhq.com/linear",
+    "location": "Remote",
+    "notes": "Project management tool. ~80 employees."
+  },
+  {
+    "name": "Fly.io",
+    "ats_type": "lever",
+    "careers_url": "https://jobs.lever.co/flyio",
+    "location": "Remote",
+    "notes": "Cloud platform. ~100 employees."
+  },
+  {
+    "name": "Supabase",
+    "ats_type": "ashby",
+    "careers_url": "https://jobs.ashbyhq.com/supabase",
+    "location": "Remote",
+    "notes": "Open-source Firebase alternative. ~100 employees."
+  },
+  {
+    "name": "Neon",
     "ats_type": "greenhouse",
-    "careers_url": "https://www.atlassian.com/company/careers",
-    "location": "Remote / Hybrid",
-    "notes": "Enterprise SaaS (Jira, Confluence). 300K+ customers. Distributed."
+    "careers_url": "https://job-boards.greenhouse.io/neondatabase",
+    "location": "Remote",
+    "notes": "Serverless Postgres. ~150 employees."
+  },
+  {
+    "name": "Tailscale",
+    "ats_type": "lever",
+    "careers_url": "https://jobs.lever.co/tailscale",
+    "location": "Remote",
+    "notes": "VPN/networking. ~100 employees."
   },
   {
     "name": "DuckDuckGo",
-    "ats_type": "ashby",
-    "careers_url": "https://jobs.ashbyhq.com/duck-duck-go",
+    "ats_type": "greenhouse",
+    "careers_url": "https://job-boards.greenhouse.io/duckduckgo",
     "location": "Remote",
-    "notes": "Privacy-focused search/browser. Fully remote. Privacy/compliance."
+    "notes": "Privacy-focused search engine. ~200 employees."
   },
   {
-    "name": "OpenAI",
-    "ats_type": "ashby",
-    "careers_url": "https://jobs.ashbyhq.com/openai",
-    "location": "Remote / Hybrid",
-    "notes": "AI research and products. ChatGPT, API platform. AI/ML focus."
-  },
-  {
-    "name": "Rippling",
-    "ats_type": "rippling",
-    "careers_url": "https://www.rippling.com/careers",
-    "location": "Remote / Hybrid",
-    "notes": "All-in-one HR/IT/finance platform. Fast growth, uses own ATS."
-  },
-  {
-    "name": "Elastic",
-    "ats_type": "greenhouse",
-    "careers_url": "https://www.elastic.co/careers",
-    "location": "Remote",
-    "notes": "Search/observability/security SaaS. Distributed company."
-  },
-  {
-    "name": "Twitch",
-    "ats_type": "greenhouse",
-    "careers_url": "https://www.twitch.tv/jobs/careers",
-    "location": "Seattle, WA / Remote",
-    "notes": "Live streaming platform (Amazon). Seattle HQ. E-commerce adjacent."
-  },
-  {
-    "name": "Remitly",
-    "ats_type": "workday",
-    "careers_url": "https://remitly.wd5.myworkdayjobs.com/Remitly_Careers",
-    "location": "Seattle, WA",
-    "notes": "Fintech/remittance. Seattle HQ. Compliance, global payments."
-  },
-  {
-    "name": "F5",
-    "ats_type": "workday",
-    "careers_url": "https://ffive.wd5.myworkdayjobs.com/f5jobs",
-    "location": "Seattle, WA",
-    "notes": "Enterprise networking/security. Seattle HQ. Large product org."
-  },
-  {
-    "name": "Convoy (Flexport)",
-    "ats_type": "greenhouse",
-    "careers_url": "https://www.flexport.com/careers/jobs/",
-    "location": "Bellevue, WA",
-    "notes": "Logistics/freight platform. Convoy talent absorbed by Flexport."
-  },
-  {
-    "name": "Hinge Health",
-    "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/hingehealth",
-    "location": "Remote / Hybrid",
-    "notes": "Digital health SaaS. Enterprise, AI/ML, analytics-driven."
-  },
-  {
-    "name": "Faire",
-    "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/faire",
-    "location": "Remote",
-    "notes": "B2B wholesale marketplace. E-commerce, data-driven."
-  },
-  {
-    "name": "Ironclad",
-    "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/ironcladinc",
-    "location": "Remote / Hybrid",
-    "notes": "Contract lifecycle SaaS. Compliance, legal-tech, AI."
-  },
-  {
-    "name": "Weights & Biases",
-    "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/wandb",
-    "location": "Remote",
-    "notes": "AI/ML developer tools platform. Analytics, instrumentation."
-  },
-  {
-    "name": "Scale AI",
+    "name": "Render",
     "ats_type": "lever",
-    "careers_url": "https://jobs.lever.co/scaleai",
-    "location": "Remote / Hybrid",
-    "notes": "AI data platform. Enterprise, government. AI/ML focus."
+    "careers_url": "https://jobs.lever.co/render",
+    "location": "Remote",
+    "notes": "Cloud hosting platform. ~150 employees."
+  },
+  {
+    "name": "Webflow",
+    "ats_type": "greenhouse",
+    "careers_url": "https://job-boards.greenhouse.io/webflow",
+    "location": "Remote",
+    "notes": "No-code web platform. ~700 employees."
+  },
+  {
+    "name": "Calendly",
+    "ats_type": "greenhouse",
+    "careers_url": "https://job-boards.greenhouse.io/calendly",
+    "location": "Remote",
+    "notes": "Scheduling platform. ~700 employees."
+  },
+  {
+    "name": "dbt Labs",
+    "ats_type": "greenhouse",
+    "careers_url": "https://job-boards.greenhouse.io/daboratorieslabs",
+    "location": "Remote",
+    "notes": "Data transformation. ~500 employees."
   },
   {
     "name": "Fivetran",
     "ats_type": "greenhouse",
     "careers_url": "https://job-boards.greenhouse.io/fivetran",
     "location": "Remote",
-    "notes": "Data integration SaaS. Analytics infrastructure. Data pipeline fit."
+    "notes": "Data integration/ETL. ~800 employees."
   },
   {
-    "name": "Navan",
+    "name": "Airbyte",
+    "ats_type": "lever",
+    "careers_url": "https://jobs.lever.co/airbyte",
+    "location": "Remote",
+    "notes": "Open-source data integration. ~200 employees."
+  },
+  {
+    "name": "Prefect",
+    "ats_type": "lever",
+    "careers_url": "https://jobs.lever.co/prefect",
+    "location": "Remote",
+    "notes": "Data orchestration platform. ~100 employees."
+  },
+  {
+    "name": "Dagster",
+    "ats_type": "lever",
+    "careers_url": "https://jobs.lever.co/dagster",
+    "location": "Remote",
+    "notes": "Data orchestration. ~100 employees."
+  },
+  {
+    "name": "Retool",
     "ats_type": "greenhouse",
-    "careers_url": "https://navan.com/careers",
-    "location": "Remote / Hybrid",
-    "notes": "Travel/expense management SaaS. Enterprise. High growth."
+    "careers_url": "https://job-boards.greenhouse.io/retool",
+    "location": "Remote",
+    "notes": "Internal tools platform. ~400 employees."
   },
   {
-    "name": "Toast",
+    "name": "Sanity",
+    "ats_type": "lever",
+    "careers_url": "https://jobs.lever.co/sanity",
+    "location": "Remote",
+    "notes": "Headless CMS platform. ~200 employees."
+  },
+  {
+    "name": "Liveblocks",
+    "ats_type": "lever",
+    "careers_url": "https://jobs.lever.co/liveblocks",
+    "location": "Remote",
+    "notes": "Real-time collaboration infrastructure. ~40 employees."
+  },
+  {
+    "name": "Knock",
+    "ats_type": "lever",
+    "careers_url": "https://jobs.lever.co/knock",
+    "location": "Remote",
+    "notes": "Notification infrastructure. ~30 employees."
+  },
+  {
+    "name": "Clerk",
+    "ats_type": "ashby",
+    "careers_url": "https://jobs.ashbyhq.com/clerk",
+    "location": "Remote",
+    "notes": "Auth/user management platform. ~80 employees."
+  },
+  {
+    "name": "Arcadia",
     "ats_type": "greenhouse",
-    "careers_url": "https://careers.toasttab.com/jobs/search",
-    "location": "Remote / Hybrid",
-    "notes": "Restaurant platform SaaS/fintech. E-commerce, POS, payments."
+    "careers_url": "https://job-boards.greenhouse.io/arcadia",
+    "location": "Remote",
+    "notes": "Fintech. Clean energy financial platform. ~200 employees."
   },
   {
-    "name": "Grammarly",
+    "name": "Titan",
     "ats_type": "greenhouse",
-    "careers_url": "https://www.grammarly.com/jobs",
-    "location": "Remote / Hybrid",
-    "notes": "AI writing platform. Product-led growth. 30M daily users."
+    "careers_url": "https://job-boards.greenhouse.io/titan",
+    "location": "Remote",
+    "notes": "Fintech. Investment management. ~200 employees."
   },
   {
-    "name": "Wiz",
+    "name": "Betterment",
     "ats_type": "greenhouse",
-    "careers_url": "https://www.wiz.io/careers",
-    "location": "Remote / Hybrid",
-    "notes": "Cloud security SaaS. Fastest-growing cybersecurity company. GRC."
+    "careers_url": "https://job-boards.greenhouse.io/betterment",
+    "location": "Remote",
+    "notes": "Fintech. Robo-advisor / investing. ~400 employees."
   },
   {
-    "name": "Abnormal Security",
+    "name": "Wealthfront",
     "ats_type": "greenhouse",
-    "careers_url": "https://job-boards.greenhouse.io/abnormalsecurity",
-    "location": "Remote / Hybrid",
-    "notes": "AI-native email security SaaS. Enterprise, compliance."
+    "careers_url": "https://job-boards.greenhouse.io/wealthfront",
+    "location": "Remote",
+    "notes": "Fintech. Automated investing. ~500 employees."
   },
   {
-    "name": "Alaska Airlines",
-    "ats_type": "icims",
-    "careers_url": "https://careers.alaskaair.com/jobs/",
-    "location": "Seattle, WA",
-    "notes": "Alaska Air Group (Alaska, Hawaiian, Horizon). Seattle HQ. Major PNW employer."
+    "name": "Lithic",
+    "ats_type": "lever",
+    "careers_url": "https://jobs.lever.co/lithic",
+    "location": "Remote",
+    "notes": "Fintech. Card issuing API. ~80 employees."
   },
   {
-    "name": "Boeing",
-    "ats_type": "workday",
-    "careers_url": "https://boeing.wd1.myworkdayjobs.com/external_careers",
-    "location": "Seattle, WA / Everett, WA",
-    "notes": "Aerospace/defense. Major PNW employer. 65+ countries."
+    "name": "Alloy",
+    "ats_type": "greenhouse",
+    "careers_url": "https://job-boards.greenhouse.io/alloy",
+    "location": "Remote",
+    "notes": "Fintech. Identity verification for banks. ~300 employees."
+  },
+  {
+    "name": "Sardine",
+    "ats_type": "lever",
+    "careers_url": "https://jobs.lever.co/sardine",
+    "location": "Remote",
+    "notes": "Fintech. Fraud/compliance platform. ~200 employees."
+  },
+  {
+    "name": "Middesk",
+    "ats_type": "lever",
+    "careers_url": "https://jobs.lever.co/middesk",
+    "location": "Remote",
+    "notes": "Fintech. Business identity/verification. ~100 employees."
+  },
+  {
+    "name": "Increase",
+    "ats_type": "ashby",
+    "careers_url": "https://jobs.ashbyhq.com/increase",
+    "location": "Remote",
+    "notes": "Fintech. Banking API infrastructure. ~100 employees."
+  },
+  {
+    "name": "Stash",
+    "ats_type": "greenhouse",
+    "careers_url": "https://job-boards.greenhouse.io/stash",
+    "location": "Remote",
+    "notes": "Fintech. Personal investing/banking. ~400 employees."
+  },
+  {
+    "name": "Greenlight",
+    "ats_type": "greenhouse",
+    "careers_url": "https://job-boards.greenhouse.io/greenlight",
+    "location": "Remote",
+    "notes": "Fintech. Family banking/investing. ~500 employees."
+  },
+  {
+    "name": "Treasure Financial",
+    "ats_type": "lever",
+    "careers_url": "https://jobs.lever.co/treasurefinancial",
+    "location": "Remote",
+    "notes": "Fintech. Business cash management. ~50 employees."
+  },
+  {
+    "name": "Puzzle",
+    "ats_type": "ashby",
+    "careers_url": "https://jobs.ashbyhq.com/puzzle",
+    "location": "Remote",
+    "notes": "Fintech. Accounting software for startups. ~50 employees."
+  },
+  {
+    "name": "Digits",
+    "ats_type": "lever",
+    "careers_url": "https://jobs.lever.co/digits",
+    "location": "Remote",
+    "notes": "Fintech. AI accounting/bookkeeping. ~100 employees."
+  },
+  {
+    "name": "Pilot",
+    "ats_type": "lever",
+    "careers_url": "https://jobs.lever.co/pilot",
+    "location": "Remote",
+    "notes": "Fintech. Bookkeeping/accounting for startups. ~300 employees."
+  },
+  {
+    "name": "Canopy",
+    "ats_type": "greenhouse",
+    "careers_url": "https://job-boards.greenhouse.io/canopy",
+    "location": "Remote",
+    "notes": "Fintech. Tax/accounting practice management. ~100 employees."
+  },
+  {
+    "name": "Gusto",
+    "ats_type": "greenhouse",
+    "careers_url": "https://job-boards.greenhouse.io/gusto",
+    "location": "Remote",
+    "notes": "Fintech. Payroll/benefits platform. ~900 employees."
+  },
+  {
+    "name": "Justworks",
+    "ats_type": "greenhouse",
+    "careers_url": "https://job-boards.greenhouse.io/justworks",
+    "location": "Remote",
+    "notes": "Fintech. Payroll/HR/compliance. ~600 employees."
+  },
+  {
+    "name": "Bench",
+    "ats_type": "lever",
+    "careers_url": "https://jobs.lever.co/bench",
+    "location": "Remote",
+    "notes": "Fintech. Bookkeeping service. ~500 employees."
   }
 ]

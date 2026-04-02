@@ -34,7 +34,7 @@ SEARCH_TITLES = [
     "Software Development Engineer",
 ]
 
-LOCATIONS = ["Minneapolis", "St. Paul", "Remote", "Madison, WI"]
+LOCATIONS = ["Hudson, WI", "Stillwater, MN", "Remote"]
 RESULTS_PER_PAGE = 50
 MAX_PAGES = 5
 REQUEST_DELAY_SECONDS = 1.0
@@ -91,25 +91,30 @@ def _parse_result(result: dict[str, Any]) -> dict[str, Any]:
 
 
 def _is_remote_or_local(result: dict[str, Any]) -> bool:
-    """Return True if the listing looks remote or in the WI/MN Twin Cities area."""
+    """Return True if the listing looks remote (US) or within ~25mi of Roberts, WI."""
     location_name = (
         (result.get("location", {}) or {}).get("display_name", "")
     ).lower()
     title = result.get("title", "").lower()
     description = (result.get("description", "") or "").lower()
 
+    # ~25mi of 54023 (Roberts, WI)
     local_signals = [
-        "minneapolis", "st. paul", "st paul", "saint paul",
-        "hudson", "woodbury", "stillwater", "roberts",
-        "eau claire", "madison", "milwaukee",
-        "bloomington", "edina", "eden prairie", "plymouth",
-        "maple grove", "minnetonka", "burnsville", "eagan",
-        "twin cities", "wisconsin", "minnesota",
+        "roberts", "hudson", "hammond", "woodville", "new richmond",
+        "baldwin", "somerset", "river falls", "star prairie", "glenwood city",
+        "stillwater", "bayport", "oak park heights", "lake elmo",
+        "oakdale", "woodbury", "lakeland", "afton", "mahtomedi",
+        "st. croix", "st croix",
     ]
     if any(s in location_name for s in local_signals):
         return True
 
     remote_signals = ["remote", "work from home", "anywhere"]
+    non_us = ["europe only", "eu only", "uk only", "emea only",
+              "apac only", "canada only", "india only"]
+    text = location_name + " " + title + " " + description[:500]
+    if any(s in text for s in non_us):
+        return False
     for signal in remote_signals:
         if signal in location_name or signal in title or signal in description[:500]:
             return True

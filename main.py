@@ -53,18 +53,23 @@ _COLLECTORS: list[tuple[str, str]] = [
     ("hn_hiring", "collectors.hn_hiring"),
 ]
 
-# Twin Cities / Wisconsin area patterns for location filtering
-_LOCAL_METRO_RE = re.compile(
-    r"\b(minneapolis|st\.?\s*paul|saint\s+paul|twin\s+cities"
-    r"|hudson|woodbury|stillwater|roberts"
-    r"|eau\s+claire|madison|milwaukee"
-    r"|bloomington|edina|eden\s+prairie|plymouth"
-    r"|maple\s+grove|minnetonka|burnsville|eagan"
-    r"|wisconsin|minnesota)\b",
+# Within ~25 miles of Roberts, WI (54023) — western WI + eastern MN suburbs
+_LOCAL_RE = re.compile(
+    r"\b(roberts|hudson|hammond|woodville|new\s+richmond|baldwin"
+    r"|somerset|river\s+falls|star\s+prairie|glenwood\s+city"
+    r"|stillwater|bayport|oak\s+park\s+heights|lake\s+elmo"
+    r"|oakdale|woodbury|lakeland|afton|mahtomedi"
+    r"|st\.?\s*croix)\b",
     re.I,
 )
 _REMOTE_RE = re.compile(
     r"\b(remote|work\s+from\s+home|distributed|anywhere)\b", re.I,
+)
+# Reject non-US remote postings
+_NON_US_RE = re.compile(
+    r"\b(europe\s+only|eu\s+only|uk\s+only|emea\s+only|apac\s+only"
+    r"|canada\s+only|latam\s+only|india\s+only|australia\s+only)\b",
+    re.I,
 )
 
 
@@ -153,7 +158,10 @@ def _matches_location(job: dict[str, Any]) -> bool:
         job.get("title", ""),
         (job.get("description", "") or "")[:500],
     ])
-    return bool(_LOCAL_METRO_RE.search(text) or _REMOTE_RE.search(text))
+    # Reject non-US remote postings
+    if _NON_US_RE.search(text):
+        return False
+    return bool(_LOCAL_RE.search(text) or _REMOTE_RE.search(text))
 
 
 # ---------------------------------------------------------------------------

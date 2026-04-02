@@ -204,11 +204,18 @@ def _score_experience(
 # 4. Company / industry fit  (0–15)
 # ---------------------------------------------------------------------------
 
-_SIZE_ENTERPRISE = [
-    "enterprise", "fortune 500", "fortune500", "large-scale", "global",
-    "publicly traded", "ipo",
+_SIZE_SMALL = [
+    "startup", "seed", "series a", "series b", "small team",
+    "early stage", "early-stage", "small company",
 ]
 _SIZE_MID = ["series b", "series c", "series d", "growth stage", "mid-size"]
+_FINANCIAL_SIGNALS = [
+    "fintech", "financial", "banking", "bank", "investing",
+    "investment", "accounting", "bookkeeping", "payroll",
+    "payments", "lending", "credit", "wealth", "portfolio",
+    "treasury", "compliance", "audit", "tax", "insurance",
+    "broker", "fund", "capital",
+]
 
 
 def _score_industry(
@@ -225,10 +232,18 @@ def _score_industry(
     matches = sum(1 for ind in industries if _has(desc, ind))
     pts += min(matches * 5, 10)
 
+    # Priority industry bonus (financial services)
+    priority: list[str] = preferences.get("priority_industries", [])
+    if priority:
+        for kw in _FINANCIAL_SIGNALS:
+            if kw in desc:
+                pts += 5
+                break
+
     # Company size signals
     target_sizes: list[str] = preferences.get("company_size", [])
-    if "enterprise" in target_sizes:
-        if any(kw in desc for kw in _SIZE_ENTERPRISE):
+    if "startup" in target_sizes or "small" in target_sizes:
+        if any(kw in desc for kw in _SIZE_SMALL):
             pts += 5
     if "mid-size" in target_sizes:
         if any(kw in desc for kw in _SIZE_MID):
@@ -251,6 +266,33 @@ _DEALBREAKER_PATTERNS: dict[str, re.Pattern[str]] = {
     "unpaid or equity-only compensation": re.compile(
         r"\b(unpaid|equity[- ]only|no\s+salary)\b", re.I,
     ),
+    "politics or political organization": re.compile(
+        r"\b(DNC|RNC|democrat(ic)?|republican|senator|congress"
+        r"|congressional|political\s+(party|campaign|action\s+committee|consulting)"
+        r"|PAC\b|lobbyist|lobbying|palantir|capitol\s+hill"
+        r"|government\s+affairs)\b", re.I,
+    ),
+    "press or media organization": re.compile(
+        r"\b(news\s*(room|paper|media)|journalist|journalism|editorial\s+board"
+        r"|press\s+corps|media\s+outlet|broadcasting|CNN|MSNBC|Fox\s+News"
+        r"|NBC\s+News|CBS\s+News|ABC\s+News|NPR|Reuters|Bloomberg\s+News"
+        r"|New\s+York\s+Times|Washington\s+Post|Wall\s+Street\s+Journal"
+        r"|Politico|HuffPost|Huffington|Breitbart|Daily\s+Wire"
+        r"|news\s+organization)\b", re.I,
+    ),
+    "FAANG or big tech": re.compile(
+        r"\b(Google|Alphabet|Meta|Facebook|Apple|Amazon|Netflix|Microsoft"
+        r"|Uber|Lyft|Airbnb|Snap|Twitter|Salesforce|Oracle|IBM"
+        r"|Intel|Cisco|Adobe|LinkedIn)\b", re.I,
+    ),
+}
+
+# Company names that indicate a FAANG/big-tech employer (checked against job company field)
+_BLOCKED_COMPANIES: set[str] = {
+    "google", "alphabet", "meta", "facebook", "apple", "amazon", "netflix",
+    "microsoft", "uber", "lyft", "airbnb", "snap", "twitter", "x corp",
+    "salesforce", "oracle", "ibm", "intel", "cisco", "adobe", "linkedin",
+    "palantir", "chewy",
 }
 
 _OVERQUALIFIED_RE = re.compile(
@@ -263,10 +305,16 @@ def _score_penalties(
     title: str,
     dealbreakers: list[str],
     experience: dict[str, Any],
+    company: str = "",
 ) -> tuple[int, list[str]]:
     text = _lower(description + " " + title)
     penalty = 0
     flags: list[str] = []
+
+    # Check company name against blocked list
+    if company.lower().strip() in _BLOCKED_COMPANIES:
+        penalty -= 15
+        flags.append(f"dealbreaker: blocked company ({company})")
 
     for label, pattern in _DEALBREAKER_PATTERNS.items():
         if pattern.search(text):
@@ -325,6 +373,7 @@ def score_job(
         desc, title,
         profile.get("dealbreakers", []),
         profile.get("experience", {}),
+        company=company,
     )
 
     flags = exp_flags + pen_flags
