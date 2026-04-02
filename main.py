@@ -2,14 +2,16 @@
 
 Steps:
   1. Load candidate profile (env var PROFILE_JSON or local profile.json)
-  2. Run all collectors (adzuna, career_pages, remotive)
+  2. Run all collectors (adzuna, career_pages, remotive, hn_hiring)
+  2b. Filter stale postings (>30 days old)
   3. Deduplicate against the SQLite database
-  4. Filter by location (remote or Seattle metro)
+  4. Filter by location (remote or Twin Cities / Wisconsin)
   5. Score new jobs with scorer.py
-  6. (Optional) LLM re-score jobs above 50 if USE_LLM_SCORING=true
-  7. Build HTML email digest
+  6. (Optional) LLM re-score jobs above 60 if USE_LLM_SCORING=true
+  7. Build HTML email digest (with still-open and recently-closed sections)
   8. Send email via Brevo SMTP
   9. Persist all jobs to the database
+  9b. Detect closed jobs (no longer in current collection)
  10. Print summary
 
 Usage:
@@ -18,7 +20,7 @@ Usage:
 
 Environment variables:
     PROFILE_JSON        — JSON string of the profile (overrides profile.json)
-    USE_LLM_SCORING     — set to 'true' to enable LLM re-scoring (stub)
+    USE_LLM_SCORING     — set to 'true' to enable LLM re-scoring
     ADZUNA_APP_ID       — Adzuna API credentials
     ADZUNA_API_KEY
     BREVO_SMTP_KEY      — Brevo SMTP key
@@ -30,8 +32,10 @@ import json
 import os
 import re
 import sys
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 from typing import Any
+
+MAX_JOB_AGE_DAYS = 30
 
 import db
 from digest import generate_digest
@@ -46,6 +50,7 @@ _COLLECTORS: list[tuple[str, str]] = [
     ("adzuna", "collectors.adzuna"),
     ("career_pages", "collectors.career_pages"),
     ("remotive", "collectors.remotive"),
+    ("hn_hiring", "collectors.hn_hiring"),
 ]
 
 # Twin Cities / Wisconsin area patterns for location filtering
@@ -97,6 +102,28 @@ def _collect_all() -> list[dict[str, Any]]:
 
 
 # ---------------------------------------------------------------------------
+# 2b. Job age filter
+# ---------------------------------------------------------------------------
+
+def _is_recent(job: dict[str, Any]) -> bool:
+    """Return True if the job was posted within MAX_JOB_AGE_DAYS, or has no date."""
+    dp = job.get("date_posted", "")
+    if not dp:
+        return True  # no date = assume current
+    try:
+        # Handle various ISO formats
+        clean = dp.replace("Z", "+00:00")
+        if "T" in clean:
+            posted = datetime.fromisoformat(clean)
+        else:
+            posted = datetime.strptime(clean[:10], "%Y-%m-%d").replace(tzinfo=timezone.utc)
+        cutoff = datetime.now(timezone.utc) - timedelta(days=MAX_JOB_AGE_DAYS)
+        return posted >= cutoff
+    except (ValueError, TypeError):
+        return True  # unparseable date = keep it
+
+
+# ---------------------------------------------------------------------------
 # 3. Deduplicate
 # ---------------------------------------------------------------------------
 
@@ -130,14 +157,14 @@ def _matches_location(job: dict[str, Any]) -> bool:
 
 
 # ---------------------------------------------------------------------------
-# 6. LLM scoring stub
+# 6. LLM scoring
 # ---------------------------------------------------------------------------
 
 def _llm_rescore(jobs: list[dict[str, Any]], profile: dict[str, Any]) -> list[dict[str, Any]]:
-    """Run LLM re-scoring on jobs with Tier 1 score >= 50."""
+    """Run LLM re-scoring on jobs with Tier 1 score >= 60."""
     try:
         from scorer_llm import score_jobs_llm
-        return score_jobs_llm(jobs, profile, threshold=50)
+        return score_jobs_llm(jobs, profile, threshold=60)
     except Exception as exc:
         print(f"LLM re-scoring failed: {exc}", file=sys.stderr)
         return jobs
@@ -160,6 +187,10 @@ def run() -> None:
     if not raw_jobs:
         print("No jobs collected — exiting.", file=sys.stderr)
         return
+
+    # 2b. Filter stale postings (>30 days old)
+    raw_jobs = [j for j in raw_jobs if _is_recent(j)]
+    print(f"After age filter (≤{MAX_JOB_AGE_DAYS}d): {len(raw_jobs)}", file=sys.stderr)
 
     # 3. Deduplicate
     conn = db.init_db()
@@ -184,9 +215,17 @@ def run() -> None:
     if os.environ.get("USE_LLM_SCORING", "").lower() == "true":
         scored = _llm_rescore(scored, profile)
 
-    # 7. Build digest
+    # 7. Build digest (with still-open and recently-closed sections)
     today = date.today()
-    html_body = generate_digest(scored, run_date=today)
+    still_open = db.get_open_jobs(conn, days=7)
+    recently_closed = db.get_closed_jobs(conn, days=3)
+    # Exclude today's new jobs from still-open (they're in the main section)
+    new_urls = {j.get("url") for j in scored}
+    still_open = [j for j in still_open if j.get("url") not in new_urls]
+    html_body = generate_digest(
+        scored, run_date=today,
+        still_open=still_open, recently_closed=recently_closed,
+    )
 
     # 8. Send email
     skip_email = os.environ.get("SKIP_EMAIL", "").lower() == "true"
@@ -204,6 +243,13 @@ def run() -> None:
     saved_new = db.save_jobs(conn, raw_jobs)
     # Update scores for the filtered/scored subset
     db.save_jobs(conn, scored)
+
+    # 9b. Detect closed jobs (no longer in current collection)
+    current_urls = {j.get("url", "") for j in raw_jobs if j.get("url")}
+    closed_count = db.mark_closed(conn, current_urls)
+    if closed_count:
+        print(f"Marked {closed_count} jobs as closed", file=sys.stderr)
+
     conn.close()
 
     # 10. Summary

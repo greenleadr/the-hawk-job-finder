@@ -202,11 +202,69 @@ def _render_job_row(job: dict[str, Any], rank: int) -> str:
     </tr>"""
 
 
+def _render_compact_row(job: dict[str, Any]) -> str:
+    """Render a compact row for still-open / recently-closed sections."""
+    title = _esc(job.get("title", "Unknown"))
+    company = _esc(job.get("company", "Unknown"))
+    location = _esc(job.get("location", "\u2014"))
+    url = _esc(job.get("url", "#"))
+    score = job.get("score", 0)
+    bg, _fg, label = _score_color(score)
+
+    return (
+        f'<tr style="border-bottom:1px solid {_DIVIDER};">'
+        f'<td style="padding:10px 16px;">'
+        f'<a href="{url}" style="color:{_TEXT_DARK};font-size:14px;font-weight:600;'
+        f'text-decoration:none;font-family:Georgia,serif;">{title}</a>'
+        f'<span style="color:{_TEXT_MUTED};font-size:13px;margin-left:6px;'
+        f'font-style:italic;">{company}</span>'
+        f'<span style="color:{_TEXT_MUTED};font-size:12px;margin-left:6px;">{location}</span>'
+        f'</td>'
+        f'<td style="padding:10px 16px;text-align:right;">'
+        f'<span style="background:{bg};color:#fff;font-size:11px;font-weight:700;'
+        f'padding:3px 10px;border-radius:4px;font-family:Georgia,serif;">{score}</span>'
+        f'</td></tr>'
+    )
+
+
+def _render_section(title: str, rows: list[dict[str, Any]], icon: str = "") -> str:
+    """Render a secondary section with compact job rows."""
+    if not rows:
+        return ""
+    rows_html = "\n".join(_render_compact_row(r) for r in rows[:10])
+    extra = (
+        f' <span style="color:{_TEXT_MUTED};font-size:13px;font-style:italic;">'
+        f'(+{len(rows) - 10} more)</span>'
+        if len(rows) > 10 else ""
+    )
+    return f"""
+    <div style="background:{_CARD_BG};overflow:hidden;margin-top:2px;
+                border-left:1px solid {_DIVIDER};
+                border-right:1px solid {_DIVIDER};">
+      <div style="padding:14px 24px;border-bottom:1px solid {_DIVIDER};
+                  background:{_BG_IVORY};">
+        <h3 style="margin:0;font-size:14px;color:{_TEXT_DARK};text-align:center;
+                   font-family:Georgia,serif;letter-spacing:2px;
+                   text-transform:uppercase;">
+          {icon} {title} ({len(rows)}){extra}
+        </h3>
+      </div>
+      <table style="width:100%;border-collapse:collapse;">
+        <tbody>{rows_html}</tbody>
+      </table>
+    </div>"""
+
+
 def generate_digest(
     scored_jobs: list[dict[str, Any]],
     run_date: date | None = None,
+    still_open: list[dict[str, Any]] | None = None,
+    recently_closed: list[dict[str, Any]] | None = None,
 ) -> str:
-    """Return an HTML email body for the given scored job list."""
+    """Return an HTML email body for the given scored job list.
+
+    *still_open* and *recently_closed* are optional DB rows for extra sections.
+    """
     today = run_date or date.today()
     date_str = today.strftime("%B %d, %Y")
     total = len(scored_jobs)
@@ -222,6 +280,13 @@ def generate_digest(
     moderate = sum(1 for j in jobs if 50 <= j.get("_score", {}).get("score", 0) < 70)
 
     rows_html = "\n".join(_render_job_row(j, i + 1) for i, j in enumerate(top))
+
+    still_open_html = _render_section(
+        "Still Open", still_open or [], icon="&#128994;"
+    )
+    closed_html = _render_section(
+        "Recently Closed", recently_closed or [], icon="&#128308;"
+    )
 
     # SVG hawk coat of arms — heraldic hawk on a shield, ivory/gold on dark
     hawk_crest = (
@@ -355,6 +420,9 @@ def generate_digest(
         </tbody>
       </table>
     </div>
+
+    {still_open_html}
+    {closed_html}
 
     <!-- Footer -->
     <div style="background:{_BG_HEADER};border-radius:0 0 8px 8px;

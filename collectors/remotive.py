@@ -14,7 +14,11 @@ from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-API_URL = "https://remotive.com/api/remote-jobs?category=software-dev"
+API_URLS = [
+    "https://remotive.com/api/remote-jobs?category=software-dev",
+    "https://remotive.com/api/remote-jobs?category=devops",
+    "https://remotive.com/api/remote-jobs?category=data",
+]
 
 _SENIOR_TITLE_RE = re.compile(
     r"\b("
@@ -81,22 +85,30 @@ def _strip_html(text: str) -> str:
 
 def search_jobs() -> list[dict[str, Any]]:
     """Query Remotive for remote software engineering roles."""
-    print("Fetching Remotive software-dev jobs …", file=sys.stderr)
-
-    try:
-        data = _fetch(API_URL)
-    except (HTTPError, URLError, RuntimeError) as exc:
-        print(f"  Remotive API error: {exc}", file=sys.stderr)
-        return []
-
-    all_jobs = data.get("jobs", [])
-    print(f"  Remotive returned {len(all_jobs)} software-dev jobs", file=sys.stderr)
-
     results: list[dict[str, Any]] = []
-    for raw in all_jobs:
-        title = raw.get("title", "")
-        if _is_senior(title):
-            results.append(_parse_job(raw))
+    seen_urls: set[str] = set()
+
+    for api_url in API_URLS:
+        category = api_url.split("category=")[-1]
+        print(f"  Remotive [{category}] …", file=sys.stderr, end=" ")
+
+        try:
+            data = _fetch(api_url)
+        except (HTTPError, URLError, RuntimeError) as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            continue
+
+        all_jobs = data.get("jobs", [])
+        count = 0
+        for raw in all_jobs:
+            title = raw.get("title", "")
+            if _is_senior(title):
+                parsed = _parse_job(raw)
+                if parsed["url"] and parsed["url"] not in seen_urls:
+                    seen_urls.add(parsed["url"])
+                    results.append(parsed)
+                    count += 1
+        print(f"{len(all_jobs)} jobs, {count} senior matches", file=sys.stderr)
 
     print(f"  After senior-title filter: {len(results)} jobs", file=sys.stderr)
     return results
