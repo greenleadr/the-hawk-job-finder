@@ -53,13 +53,18 @@ _COLLECTORS: list[tuple[str, str]] = [
     ("hn_hiring", "collectors.hn_hiring"),
 ]
 
-# Within ~25 miles of Roberts, WI (54023) — western WI + eastern MN suburbs
+# Within ~25 miles of Roberts, WI (54023) + Twin Cities metro
 _LOCAL_RE = re.compile(
     r"\b(roberts|hudson|hammond|woodville|new\s+richmond|baldwin"
     r"|somerset|river\s+falls|star\s+prairie|glenwood\s+city"
     r"|stillwater|bayport|oak\s+park\s+heights|lake\s+elmo"
     r"|oakdale|woodbury|lakeland|afton|mahtomedi"
-    r"|st\.?\s*croix)\b",
+    r"|st\.?\s*croix"
+    r"|minneapolis|st\.?\s*paul|saint\s+paul|twin\s+cities"
+    r"|bloomington|edina|eden\s+prairie|plymouth"
+    r"|maple\s+grove|minnetonka|burnsville|eagan"
+    r"|richfield|golden\s+valley|hopkins|brooklyn\s+park"
+    r"|maplewood|roseville|fridley|coon\s+rapids)\b",
     re.I,
 )
 _REMOTE_RE = re.compile(

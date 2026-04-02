@@ -34,7 +34,7 @@ SEARCH_TITLES = [
     "Software Development Engineer",
 ]
 
-LOCATIONS = ["Hudson, WI", "Stillwater, MN", "Remote"]
+LOCATIONS = ["Minneapolis", "St. Paul", "Hudson, WI", "Remote"]
 RESULTS_PER_PAGE = 50
 MAX_PAGES = 5
 REQUEST_DELAY_SECONDS = 1.0
@@ -98,13 +98,18 @@ def _is_remote_or_local(result: dict[str, Any]) -> bool:
     title = result.get("title", "").lower()
     description = (result.get("description", "") or "").lower()
 
-    # ~25mi of 54023 (Roberts, WI)
+    # ~25mi of 54023 (Roberts, WI) + Twin Cities metro
     local_signals = [
         "roberts", "hudson", "hammond", "woodville", "new richmond",
         "baldwin", "somerset", "river falls", "star prairie", "glenwood city",
         "stillwater", "bayport", "oak park heights", "lake elmo",
         "oakdale", "woodbury", "lakeland", "afton", "mahtomedi",
         "st. croix", "st croix",
+        "minneapolis", "st. paul", "st paul", "saint paul", "twin cities",
+        "bloomington", "edina", "eden prairie", "plymouth",
+        "maple grove", "minnetonka", "burnsville", "eagan",
+        "richfield", "golden valley", "hopkins", "brooklyn park",
+        "maplewood", "roseville", "fridley", "coon rapids",
     ]
     if any(s in location_name for s in local_signals):
         return True
