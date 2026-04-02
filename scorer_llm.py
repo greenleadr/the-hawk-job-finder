@@ -212,28 +212,28 @@ def score_jobs_llm(
 # ---------------------------------------------------------------------------
 
 _DEMO_JOB = {
-    "title": "Director of Product",
-    "company": "Acme SaaS Corp",
-    "location": "Seattle, WA (Remote eligible)",
+    "title": "Senior Software Engineer",
+    "company": "Acme Cloud Corp",
+    "location": "Remote (US)",
     "description": (
-        "We are looking for a Director of Product to own the product strategy "
-        "and roadmap for our enterprise SaaS platform. You will drive P&L "
-        "accountability, lead cross-functional teams, and champion data-driven "
-        "decision-making. 10+ years of product management experience required. "
-        "Experience with e-commerce, analytics, compliance, and agile "
-        "methodologies preferred. You will manage a team of 8-12 product "
-        "managers. AI/ML experience is a plus."
+        "We are looking for a Senior Software Engineer to build and maintain "
+        "our cloud infrastructure and data platform. You will work with React, "
+        "TypeScript, Python, and AWS (S3, Lambda, SNS, SQS). Experience with "
+        "Terraform, PostgreSQL, and event-driven architectures required. "
+        "8+ years of software development experience. E-commerce or SaaS "
+        "background preferred. Cross-functional agile team. Snowflake "
+        "experience is a plus."
     ),
     "url": "https://example.com/jobs/1",
     "source": "demo",
     "_score": {
-        "score": 86,
+        "score": 82,
         "matched_skills": [
-            "product strategy", "roadmap", "P&L", "data-driven",
-            "cross-functional", "enterprise", "SaaS", "e-commerce",
-            "analytics", "agile", "compliance",
+            "React", "TypeScript", "Python", "AWS", "Terraform",
+            "PostgreSQL", "event-driven", "S3", "Lambda", "Agile",
+            "cross-functional", "Snowflake",
         ],
-        "gaps": ["GRC", "AI/ML", "instrumentation"],
+        "gaps": ["Java", "Spring Boot", "Next.js"],
         "flags": [],
     },
 }

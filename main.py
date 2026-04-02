@@ -48,11 +48,14 @@ _COLLECTORS: list[tuple[str, str]] = [
     ("remotive", "collectors.remotive"),
 ]
 
-# Seattle metro area patterns for location filtering
-_SEATTLE_METRO_RE = re.compile(
-    r"\b(seattle|bellevue|redmond|kirkland|tacoma|renton|kent|bothell"
-    r"|woodinville|issaquah|sammamish|mercer\s+island"
-    r"|whidbey|oak\s+harbor|everett)\b",
+# Twin Cities / Wisconsin area patterns for location filtering
+_LOCAL_METRO_RE = re.compile(
+    r"\b(minneapolis|st\.?\s*paul|saint\s+paul|twin\s+cities"
+    r"|hudson|woodbury|stillwater|roberts"
+    r"|eau\s+claire|madison|milwaukee"
+    r"|bloomington|edina|eden\s+prairie|plymouth"
+    r"|maple\s+grove|minnetonka|burnsville|eagan"
+    r"|wisconsin|minnesota)\b",
     re.I,
 )
 _REMOTE_RE = re.compile(
@@ -123,7 +126,7 @@ def _matches_location(job: dict[str, Any]) -> bool:
         job.get("title", ""),
         (job.get("description", "") or "")[:500],
     ])
-    return bool(_SEATTLE_METRO_RE.search(text) or _REMOTE_RE.search(text))
+    return bool(_LOCAL_METRO_RE.search(text) or _REMOTE_RE.search(text))
 
 
 # ---------------------------------------------------------------------------

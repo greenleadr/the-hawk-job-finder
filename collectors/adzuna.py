@@ -1,6 +1,6 @@
 """Adzuna job search collector.
 
-Queries the Adzuna API for product leadership roles matching the
+Queries the Adzuna API for software engineering roles matching the
 target profile. Requires ADZUNA_APP_ID and ADZUNA_API_KEY environment
 variables (register at https://developer.adzuna.com).
 
@@ -21,21 +21,20 @@ from urllib.request import Request, urlopen
 BASE_URL = "https://api.adzuna.com/v1/api/jobs/us/search"
 
 SEARCH_TITLES = [
-    "VP Product",
-    "Director Product",
-    "Head of Product",
-    "Vice President Product",
-    "Senior Director Product",
-    "Senior Manager Product",
-    "Associate Director Product",
-    "Group Product Manager",
-    "Principal Product Manager",
-    "Director Product Management",
-    "Director Technical Product",
-    "Senior Product Manager",
+    "Senior Software Engineer",
+    "Staff Software Engineer",
+    "Senior Full Stack Engineer",
+    "Senior Frontend Engineer",
+    "Senior Backend Engineer",
+    "Senior Platform Engineer",
+    "Senior Cloud Engineer",
+    "Senior Data Engineer",
+    "Lead Software Engineer",
+    "Principal Software Engineer",
+    "Software Development Engineer",
 ]
 
-LOCATIONS = ["Seattle", "Remote", "Whidbey Island"]
+LOCATIONS = ["Minneapolis", "St. Paul", "Remote", "Madison, WI"]
 RESULTS_PER_PAGE = 50
 MAX_PAGES = 5
 REQUEST_DELAY_SECONDS = 1.0
@@ -91,16 +90,23 @@ def _parse_result(result: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def _is_remote_or_seattle(result: dict[str, Any]) -> bool:
-    """Return True if the listing looks remote or Seattle-area."""
+def _is_remote_or_local(result: dict[str, Any]) -> bool:
+    """Return True if the listing looks remote or in the WI/MN Twin Cities area."""
     location_name = (
         (result.get("location", {}) or {}).get("display_name", "")
     ).lower()
     title = result.get("title", "").lower()
     description = (result.get("description", "") or "").lower()
 
-    pnw_signals = ["seattle", "bellevue", "redmond", "whidbey", "oak harbor", "everett"]
-    if any(s in location_name for s in pnw_signals):
+    local_signals = [
+        "minneapolis", "st. paul", "st paul", "saint paul",
+        "hudson", "woodbury", "stillwater", "roberts",
+        "eau claire", "madison", "milwaukee",
+        "bloomington", "edina", "eden prairie", "plymouth",
+        "maple grove", "minnetonka", "burnsville", "eagan",
+        "twin cities", "wisconsin", "minnesota",
+    ]
+    if any(s in location_name for s in local_signals):
         return True
 
     remote_signals = ["remote", "work from home", "anywhere"]
@@ -112,7 +118,7 @@ def _is_remote_or_seattle(result: dict[str, Any]) -> bool:
 
 
 def search_jobs() -> list[dict[str, Any]]:
-    """Query Adzuna for product leadership roles and return normalized results."""
+    """Query Adzuna for software engineering roles and return normalized results."""
     app_id, api_key = _get_credentials()
     all_jobs: list[dict[str, Any]] = []
     seen_urls: set[str] = set()
@@ -145,7 +151,7 @@ def search_jobs() -> list[dict[str, Any]]:
                 break
 
             for result in results:
-                if not _is_remote_or_seattle(result):
+                if not _is_remote_or_local(result):
                     continue
                 parsed = _parse_result(result)
                 if parsed["url"] and parsed["url"] not in seen_urls:

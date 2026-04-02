@@ -44,19 +44,23 @@ def _has(haystack: str, needle: str) -> bool:
 # 1. Title match  (0–30)
 # ---------------------------------------------------------------------------
 
-# Patterns that count as "adjacent" product-leadership titles
+# Patterns that count as "adjacent" engineering titles
 _ADJACENT_PATTERNS: list[re.Pattern[str]] = [
-    re.compile(r"\bsenior\s+(product\s+manager|pm)\b", re.I),
-    re.compile(r"\bstaff\s+product\s+manager\b", re.I),
-    re.compile(r"\bprincipal\s+(product\s+manager|pm)\b", re.I),
-    re.compile(r"\bgroup\s+product\s+manager\b", re.I),
-    re.compile(r"\bproduct\s+lead\b", re.I),
+    re.compile(r"\bsoftware\s+engineer\s*(ii|iii|iv)?\b", re.I),
+    re.compile(r"\bfull[- ]?stack\s+(developer|engineer)\b", re.I),
+    re.compile(r"\bfront[- ]?end\s+(developer|engineer)\b", re.I),
+    re.compile(r"\bback[- ]?end\s+(developer|engineer)\b", re.I),
+    re.compile(r"\bplatform\s+engineer\b", re.I),
+    re.compile(r"\bcloud\s+engineer\b", re.I),
+    re.compile(r"\bdata\s+engineer\b", re.I),
+    re.compile(r"\bsde\b", re.I),
+    re.compile(r"\bswe\b", re.I),
 ]
 
 # Tokens that help detect a "partial" title match
 _TITLE_TOKENS = [
-    "director", "vp", "vice president", "head of product",
-    "senior manager", "associate director",
+    "senior", "staff", "principal", "lead",
+    "engineer", "developer", "sde", "swe",
 ]
 
 
@@ -238,16 +242,8 @@ def _score_industry(
 # ---------------------------------------------------------------------------
 
 _DEALBREAKER_PATTERNS: dict[str, re.Pattern[str]] = {
-    "requires hands-on coding as primary function": re.compile(
-        r"\b(hands[- ]on\s+coding|write\s+production\s+code|software\s+engineer"
-        r"|must\s+code\s+daily)\b", re.I,
-    ),
-    "requires CS degree": re.compile(
-        r"\b(requires?\s+(a\s+)?((BS|bachelor'?s?)\s+(in\s+)?"
-        r"computer\s+science|CS\s+degree))\b", re.I,
-    ),
     "junior scope": re.compile(
-        r"\b(junior|entry[- ]level|associate\s+product\s+manager|apm\s+program)\b", re.I,
+        r"\b(junior|entry[- ]level|intern\b|internship)\b", re.I,
     ),
     "contract under 6 months": re.compile(
         r"\b(contract|temp)\b.*?\b([1-5]\s+month|short[- ]term)\b", re.I,
@@ -377,49 +373,47 @@ def score_jobs(
 
 _DEMO_JOBS: list[dict[str, Any]] = [
     {
-        "title": "Director of Product",
-        "company": "Acme SaaS Corp",
+        "title": "Senior Software Engineer",
+        "company": "Acme Cloud Corp",
         "description": (
-            "We are looking for a Director of Product to own the product strategy "
-            "and roadmap for our enterprise SaaS platform. You will drive P&L "
-            "accountability, lead cross-functional teams, and champion data-driven "
-            "decision-making. 10+ years of product management experience required. "
-            "Experience with e-commerce, analytics, and agile methodologies preferred. "
-            "You will manage a team of 8-12 product managers."
+            "We are looking for a Senior Software Engineer to build and maintain "
+            "our cloud infrastructure. You will work with React, TypeScript, and AWS "
+            "(S3, Lambda, SNS, SQS). Experience with Terraform, PostgreSQL, and "
+            "event-driven architectures required. 8+ years of software development "
+            "experience. E-commerce or SaaS background preferred. Agile team."
         ),
         "url": "https://example.com/jobs/1",
         "source": "demo",
     },
     {
-        "title": "Senior Product Manager",
-        "company": "Startup Inc",
+        "title": "Staff Software Engineer",
+        "company": "DataPlatform Inc",
         "description": (
-            "Senior PM to build our dashboard product. 3-5 years experience. "
-            "Must write production code in Python. SQL and Tableau required. "
-            "Series A startup, equity-heavy compensation."
+            "Staff engineer to lead our data platform migration from Vertica to "
+            "Snowflake. Strong SQL, Python, and ETL pipeline experience required. "
+            "10+ years experience. You will work cross-functionally with data "
+            "engineering and analytics teams. Spring Boot and Java preferred. "
+            "Remote-friendly, enterprise company."
         ),
         "url": "https://example.com/jobs/2",
         "source": "demo",
     },
     {
-        "title": "VP of Product",
-        "company": "BigRetail Global",
+        "title": "Frontend Developer",
+        "company": "SmallStartup",
         "description": (
-            "Vice President of Product for our global e-commerce and retail platform. "
-            "Lead product strategy across compliance, privacy, and GRC initiatives. "
-            "12+ years experience, people leadership of 20+ person org. "
-            "AI/ML and analytics experience strongly preferred. "
-            "Fortune 500 company with SaaS and enterprise customers."
+            "Frontend developer to build React components. 3-5 years experience. "
+            "JavaScript and CSS required. Series A startup."
         ),
         "url": "https://example.com/jobs/3",
         "source": "demo",
     },
     {
-        "title": "Junior Product Analyst",
+        "title": "Junior Software Engineer Intern",
         "company": "TinyStartup",
         "description": (
-            "Entry-level product role. 1-2 years experience. "
-            "Help the team with data pipeline and machine learning projects. "
+            "Entry-level internship role. 0-1 years experience. "
+            "Help the team with basic web development tasks. "
             "Contract position, 3 months."
         ),
         "url": "https://example.com/jobs/4",

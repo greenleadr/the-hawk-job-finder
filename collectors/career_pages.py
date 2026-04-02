@@ -21,20 +21,21 @@ from urllib.request import Request, urlopen
 
 _COMPANIES_PATH = Path(__file__).resolve().parent.parent / "companies.json"
 
-# Titles we care about — must contain "product" AND a leadership signal
-_PRODUCT_RE = re.compile(r"\bproduct\b", re.I)
-_LEADERSHIP_RE = re.compile(
+# Titles we care about — must match software engineering roles at senior+ level
+_ENGINEERING_RE = re.compile(
+    r"\b(software|platform|cloud|data|full[- ]?stack|front[- ]?end|back[- ]?end|systems?)\b",
+    re.I,
+)
+_ROLE_RE = re.compile(
+    r"\b(engineer|developer|sde|swe)\b",
+    re.I,
+)
+_SENIORITY_RE = re.compile(
     r"\b("
-    r"director|sr\.?\s*director|senior\s+director|"
-    r"vp\b|vice\s+president|"
-    r"head\s+of|"
-    r"senior\s+manager|"
-    r"associate\s+director|"
-    r"group\s+product\s+manager|"
-    r"principal\s+product\s+manager|"
-    r"chief\s+product|"
-    r"staff\s+product\s+manager|"
-    r"senior\s+product\s+manager"
+    r"senior|sr\.?|staff|principal|lead|"
+    r"ii\b|iii\b|iv\b|"
+    r"sde\s*(ii|iii)|"
+    r"software\s+development\s+engineer"
     r")\b",
     re.I,
 )
@@ -47,8 +48,12 @@ def _strip_html(text: str) -> str:
     return re.sub(r"\s+", " ", clean).strip()
 
 
-def _is_product_leadership(title: str) -> bool:
-    return bool(_PRODUCT_RE.search(title) and _LEADERSHIP_RE.search(title))
+def _is_target_role(title: str) -> bool:
+    return bool(
+        _ENGINEERING_RE.search(title)
+        and _ROLE_RE.search(title)
+        and _SENIORITY_RE.search(title)
+    )
 
 
 def _fetch_json(url: str, retries: int = 2, method: str = "GET",
@@ -111,7 +116,7 @@ def _fetch_greenhouse(company: dict[str, Any]) -> list[dict[str, Any]]:
     jobs: list[dict[str, Any]] = []
     for j in data["jobs"]:
         title = j.get("title", "")
-        if not _is_product_leadership(title):
+        if not _is_target_role(title):
             continue
         loc = (j.get("location", {}) or {}).get("name", "")
         jobs.append({
@@ -151,7 +156,7 @@ def _fetch_lever(company: dict[str, Any]) -> list[dict[str, Any]]:
     jobs: list[dict[str, Any]] = []
     for j in data:
         title = j.get("text", "")
-        if not _is_product_leadership(title):
+        if not _is_target_role(title):
             continue
         cats = j.get("categories", {}) or {}
         loc = cats.get("location", "")
@@ -207,7 +212,7 @@ def _fetch_ashby(company: dict[str, Any]) -> list[dict[str, Any]]:
     jobs: list[dict[str, Any]] = []
     for j in data["jobs"]:
         title = j.get("title", "")
-        if not _is_product_leadership(title):
+        if not _is_target_role(title):
             continue
         loc = j.get("location", "")
         if isinstance(loc, dict):
@@ -274,7 +279,7 @@ def search_jobs(companies_path: str | Path | None = None) -> list[dict[str, Any]
     print(
         f"  career_pages: queried {queried} companies, "
         f"skipped {skipped} (unsupported ATS), "
-        f"found {len(all_jobs)} product-leadership jobs",
+        f"found {len(all_jobs)} software engineering jobs",
         file=sys.stderr,
     )
     return all_jobs

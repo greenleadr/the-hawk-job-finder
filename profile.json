@@ -1,30 +1,340 @@
 {
-  "name": "Nadine",
-  "headline": "",
-  "summary": "",
-  "target_titles": [],
+  "name": "Nadine Beckwith",
+  "headline": "Senior Software Engineer | Full-Stack | Cloud & Data Platform Engineering",
+  "summary": "Senior Software Engineer with 10+ years of experience delivering production-grade systems across frontend, backend, cloud infrastructure, and data platforms. Proven track record in high-impact UI systems, cloud and data migrations, security-conscious development, and operational ownership in large-scale, regulated environments. Translates business priorities into scalable technical solutions and owns delivery end-to-end.",
+  "target_titles": [
+    "Senior Software Engineer",
+    "Staff Software Engineer",
+    "Software Engineer III",
+    "Software Engineer IV",
+    "Senior Full Stack Engineer",
+    "Senior Frontend Engineer",
+    "Senior Backend Engineer",
+    "Senior Platform Engineer",
+    "Senior Cloud Engineer",
+    "Senior Data Engineer",
+    "Lead Software Engineer",
+    "Principal Software Engineer",
+    "Software Development Engineer II",
+    "Software Development Engineer III",
+    "System Development Engineer"
+  ],
   "skills": {
-    "high": [],
-    "medium": [],
-    "low": []
+    "high": [
+      "React",
+      "TypeScript",
+      "AWS",
+      "Terraform",
+      "Python",
+      "Snowflake",
+      "Java",
+      "Node.js",
+      "PostgreSQL",
+      "REST APIs",
+      "event-driven",
+      "cloud infrastructure",
+      "data migration",
+      "full-stack"
+    ],
+    "medium": [
+      "Next.js",
+      "JavaScript",
+      "SQL",
+      "Spring Boot",
+      "Lambda",
+      "S3",
+      "IAM",
+      "KMS",
+      "Secrets Manager",
+      "SNS",
+      "SQS",
+      "Ruby on Rails",
+      "integration testing",
+      "Jest",
+      "React Testing Library",
+      "Agile",
+      "Scrum",
+      "Jira",
+      "cross-functional",
+      "design systems"
+    ],
+    "low": [
+      "Vertica",
+      "SSRS",
+      "SSIS",
+      "database management",
+      "technical writing",
+      "Workday",
+      "performance optimization",
+      "ETL",
+      "Linux",
+      "shell scripting"
+    ]
   },
-  "skill_variants": {},
+  "skill_variants": {
+    "React": [
+      "React.js",
+      "ReactJS",
+      "React components",
+      "React hooks",
+      "frontend framework"
+    ],
+    "TypeScript": [
+      "TS",
+      "typed JavaScript"
+    ],
+    "AWS": [
+      "Amazon Web Services",
+      "cloud services",
+      "AWS cloud"
+    ],
+    "Terraform": [
+      "infrastructure as code",
+      "IaC",
+      "Terraform modules",
+      "HCL"
+    ],
+    "Python": [
+      "Python3",
+      "Python 3"
+    ],
+    "Snowflake": [
+      "Snowflake data warehouse",
+      "Snowflake analytics",
+      "data warehouse"
+    ],
+    "Java": [
+      "Java 11",
+      "Java 17",
+      "JVM",
+      "Java SE"
+    ],
+    "Node.js": [
+      "NodeJS",
+      "Node",
+      "Express",
+      "Express.js"
+    ],
+    "PostgreSQL": [
+      "Postgres",
+      "PostgreSQL database",
+      "RDS",
+      "Amazon RDS"
+    ],
+    "REST APIs": [
+      "RESTful",
+      "REST",
+      "API development",
+      "API design",
+      "microservices"
+    ],
+    "event-driven": [
+      "event-driven architecture",
+      "event driven",
+      "message queue",
+      "pub/sub",
+      "event bus"
+    ],
+    "cloud infrastructure": [
+      "cloud platform",
+      "cloud architecture",
+      "cloud native",
+      "cloud-native",
+      "infrastructure"
+    ],
+    "data migration": [
+      "data platform",
+      "database migration",
+      "data pipeline",
+      "data engineering",
+      "ETL pipeline"
+    ],
+    "full-stack": [
+      "full stack",
+      "fullstack",
+      "front-end and back-end",
+      "frontend and backend"
+    ],
+    "Next.js": [
+      "NextJS",
+      "Next"
+    ],
+    "JavaScript": [
+      "JS",
+      "ES6",
+      "ECMAScript"
+    ],
+    "SQL": [
+      "complex queries",
+      "CTEs",
+      "stored procedures",
+      "relational databases"
+    ],
+    "Spring Boot": [
+      "Spring Framework",
+      "Spring MVC",
+      "Spring"
+    ],
+    "Lambda": [
+      "AWS Lambda",
+      "serverless",
+      "serverless functions"
+    ],
+    "S3": [
+      "AWS S3",
+      "object storage",
+      "S3 bucket"
+    ],
+    "integration testing": [
+      "integration tests",
+      "end-to-end testing",
+      "e2e testing",
+      "test automation"
+    ],
+    "Jest": [
+      "unit testing",
+      "test framework",
+      "JavaScript testing"
+    ],
+    "Agile": [
+      "agile methodologies",
+      "agile development",
+      "agile software development"
+    ],
+    "Scrum": [
+      "sprint planning",
+      "sprint",
+      "scrum ceremonies"
+    ],
+    "cross-functional": [
+      "cross functional",
+      "interdisciplinary",
+      "collaborative"
+    ],
+    "design systems": [
+      "component library",
+      "shared components",
+      "UI library",
+      "design system"
+    ],
+    "Ruby on Rails": [
+      "Rails",
+      "RoR",
+      "Ruby"
+    ],
+    "performance optimization": [
+      "performance tuning",
+      "optimization",
+      "scalability",
+      "high performance"
+    ],
+    "ETL": [
+      "extract transform load",
+      "data pipeline",
+      "data ingestion"
+    ]
+  },
   "experience": {
-    "total_years": 0,
-    "management_years": 0,
-    "largest_team_size": 0,
-    "total_direct_reports_max": 0,
-    "notable_companies": [],
-    "industries": [],
-    "roles": [],
+    "total_years": 10,
+    "management_years": 1,
+    "largest_team_size": 2,
+    "total_direct_reports_max": 2,
+    "notable_companies": [
+      "Amazon",
+      "Chewy",
+      "Federated Investors"
+    ],
+    "industries": [
+      "e-commerce",
+      "retail",
+      "fulfillment",
+      "logistics",
+      "robotics",
+      "fintech",
+      "financial services",
+      "SaaS",
+      "cloud",
+      "data analytics",
+      "operations"
+    ],
+    "roles": [
+      {
+        "title": "Software Engineer",
+        "company": "Chewy",
+        "dates": "Jan 2023 – Feb 2026",
+        "highlights": [
+          "Built event-driven ingestion pipeline (S3, Lambda, Terraform) for employee data processing",
+          "Migrated analytics workloads from Vertica to Snowflake with data parity validation",
+          "Led zero-downtime RDS database migrations across AWS accounts",
+          "Owned large-scale React/TypeScript UI components for internal operations",
+          "Designed organization-based access control feature within complex forms system",
+          "Provided on-site engineering for robotics fulfillment launch (<0.1% defect rate)",
+          "Led adoption of shared React component patterns across multiple applications"
+        ]
+      },
+      {
+        "title": "System Development Engineer II",
+        "company": "Amazon",
+        "dates": "Jan 2020 – Feb 2022",
+        "highlights": [
+          "Designed scalable data visualization web app within Amazon's metrics platform",
+          "Led end-to-end development of COVID-19 social distancing metrics dashboard",
+          "Delivered initial production release within two weeks for urgent health/safety needs",
+          "Worked with international legal teams on region-specific privacy compliance",
+          "Mentored L4 SDE through promotion to L5"
+        ]
+      },
+      {
+        "title": "Program Developer",
+        "company": "Amazon",
+        "dates": "Jan 2016 – Dec 2020",
+        "highlights": [
+          "Designed network-wide defect monitoring dashboard for quality issue tracking",
+          "Built internal tools for individual productivity metrics and performance transparency"
+        ]
+      },
+      {
+        "title": "Associate Application Systems Analyst/Programmer",
+        "company": "Federated Investors",
+        "dates": "Jan 2014 – Dec 2016",
+        "highlights": [
+          "Designed reporting solutions using SSRS and Excel VBA in regulated environment",
+          "Built automated batch workflows using BMC Workload Automation and Linux scripting",
+          "Ensured SEC compliance standards and internal controls"
+        ]
+      }
+    ],
     "board_experience": []
   },
-  "key_metrics": {},
-  "resume_context": "",
-  "preferences": {
-    "work_arrangement": [],
-    "locations": [],
-    "company_size": []
+  "key_metrics": {
+    "robotics_launch_defect_rate": "<0.1%",
+    "covid_dashboard_delivery": "2 weeks",
+    "years_experience": "10+"
   },
-  "dealbreakers": []
+  "resume_context": "Nadine Beckwith is a Senior Software Engineer with 10+ years of experience at Amazon (6 years across 2 roles), Chewy (3 years), and Federated Investors (3 years). Education: IT degree from Point Park University, History degree from Cal U of PA. At Chewy, she built event-driven ingestion pipelines (S3/Lambda/Terraform), migrated analytics from Vertica to Snowflake, led zero-downtime RDS migrations across AWS accounts, owned large-scale React/TypeScript UI components, designed org-based access control, supported robotics fulfillment launches (<0.1% defect rate), and led shared React component pattern adoption. At Amazon (SDE II), she designed scalable data visualization apps in Amazon's metrics platform, led end-to-end COVID-19 social distancing dashboard development (delivered in 2 weeks), worked with international legal on privacy compliance, and mentored an L4 to L5 promotion. At Amazon (Program Developer), she built defect monitoring dashboards and productivity tracking tools. At Federated Investors, she built SSRS/VBA reporting solutions, automated batch workflows, and maintained SEC compliance. Core strengths: full-stack development (React/TypeScript/Java/Python), cloud infrastructure (AWS — S3, Lambda, SNS, SQS, IAM, KMS, Terraform), data platform engineering (Snowflake, Vertica, PostgreSQL, ETL), production operations, access control systems, and delivering under tight timelines in regulated environments.",
+  "preferences": {
+    "work_arrangement": [
+      "remote",
+      "hybrid"
+    ],
+    "locations": [
+      "Roberts, WI",
+      "Minneapolis, MN",
+      "St. Paul, MN",
+      "Hudson, WI",
+      "Woodbury, MN",
+      "Stillwater, MN",
+      "Eau Claire, WI",
+      "Madison, WI"
+    ],
+    "company_size": [
+      "mid-size",
+      "enterprise"
+    ]
+  },
+  "dealbreakers": [
+    "junior scope",
+    "contract under 6 months",
+    "unpaid or equity-only compensation"
+  ]
 }

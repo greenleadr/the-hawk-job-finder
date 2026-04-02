@@ -1,7 +1,7 @@
-"""Remotive.com collector for remote product-leadership roles.
+"""Remotive.com collector for remote software engineering roles.
 
-Queries the free Remotive API for the "product" category and filters
-to senior titles (Director, VP, Head of Product, etc.).
+Queries the free Remotive API for the "software-dev" category and filters
+to senior-level engineering titles.
 
 Usage:
     python -m collectors.remotive
@@ -14,22 +14,23 @@ from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-API_URL = "https://remotive.com/api/remote-jobs?category=product"
+API_URL = "https://remotive.com/api/remote-jobs?category=software-dev"
 
 _SENIOR_TITLE_RE = re.compile(
     r"\b("
-    r"director|"
-    r"senior\s+director|"
-    r"vp\b|"
-    r"vice\s+president|"
-    r"head\s+of\s+product|"
-    r"associate\s+director|"
-    r"senior\s+manager|"
-    r"group\s+product\s+manager|"
-    r"principal\s+product\s+manager|"
-    r"staff\s+product\s+manager|"
-    r"senior\s+product\s+manager|"
-    r"chief\s+product"
+    r"senior\s+(software\s+)?engineer|"
+    r"sr\.?\s+(software\s+)?engineer|"
+    r"staff\s+(software\s+)?engineer|"
+    r"principal\s+(software\s+)?engineer|"
+    r"lead\s+(software\s+)?engineer|"
+    r"software\s+development\s+engineer|"
+    r"sde\s*(ii|iii|iv)|"
+    r"senior\s+full[- ]?stack|"
+    r"senior\s+front[- ]?end|"
+    r"senior\s+back[- ]?end|"
+    r"senior\s+platform\s+engineer|"
+    r"senior\s+cloud\s+engineer|"
+    r"senior\s+data\s+engineer"
     r")\b",
     re.I,
 )
@@ -79,8 +80,8 @@ def _strip_html(text: str) -> str:
 
 
 def search_jobs() -> list[dict[str, Any]]:
-    """Query Remotive for remote product leadership roles."""
-    print("Fetching Remotive product jobs …", file=sys.stderr)
+    """Query Remotive for remote software engineering roles."""
+    print("Fetching Remotive software-dev jobs …", file=sys.stderr)
 
     try:
         data = _fetch(API_URL)
@@ -89,7 +90,7 @@ def search_jobs() -> list[dict[str, Any]]:
         return []
 
     all_jobs = data.get("jobs", [])
-    print(f"  Remotive returned {len(all_jobs)} product jobs", file=sys.stderr)
+    print(f"  Remotive returned {len(all_jobs)} software-dev jobs", file=sys.stderr)
 
     results: list[dict[str, Any]] = []
     for raw in all_jobs:

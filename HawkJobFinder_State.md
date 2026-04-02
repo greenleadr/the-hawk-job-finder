@@ -26,8 +26,8 @@
 
 | Component | Status | Notes |
 |-----------|--------|-------|
-| `profile.json` | Needs setup | Blank template — fill with Nadine's profile |
-| `companies.json` | Needs review | Inherited from template — update for Nadine's target companies |
+| `profile.json` | Done | 15 target titles, 44 skills + variants, 4 roles, Nadine's full resume context |
+| `companies.json` | Needs review | Inherited from template — review for Nadine's target companies |
 | `collectors/adzuna.py` | Done | Title queries, rate limiting, retry |
 | `collectors/remotive.py` | Done | Title filter regex, HTML stripping |
 | `collectors/career_pages.py` | Done | Greenhouse, Lever, Ashby public JSON APIs |
@@ -60,9 +60,7 @@
 - Sender: Update `BREVO_SENDER` secret and `DEFAULT_SENDER` in emailer.py once domain is set up
 
 ## Next Steps (Priority Order)
-1. **Fill out `profile.json`** — Add Nadine's target titles, skills, experience, preferences
-2. **Update `companies.json`** — Curate target companies relevant to Nadine
-3. **Update location filter in `main.py`** — Set locations matching Nadine's preferences
-4. **Configure GitHub Actions secrets** — Set up all required API keys and credentials
-5. **Set up email sender domain** — Configure Brevo SMTP with verified domain
-6. **Clear `data/jobs.db`** — Fresh database once pipeline is configured
+1. **Review `companies.json`** — Curate target companies relevant to Nadine's SWE job search
+2. **Configure GitHub Actions secrets** — Set up all required API keys and credentials
+3. **Set up email sender domain** — Configure Brevo SMTP with verified domain
+4. **Test pipeline** — Run `SKIP_EMAIL=true python main.py` to verify end-to-end
