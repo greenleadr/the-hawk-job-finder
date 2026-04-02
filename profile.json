@@ -1,0 +1,30 @@
+{
+  "name": "Nadine",
+  "headline": "",
+  "summary": "",
+  "target_titles": [],
+  "skills": {
+    "high": [],
+    "medium": [],
+    "low": []
+  },
+  "skill_variants": {},
+  "experience": {
+    "total_years": 0,
+    "management_years": 0,
+    "largest_team_size": 0,
+    "total_direct_reports_max": 0,
+    "notable_companies": [],
+    "industries": [],
+    "roles": [],
+    "board_experience": []
+  },
+  "key_metrics": {},
+  "resume_context": "",
+  "preferences": {
+    "work_arrangement": [],
+    "locations": [],
+    "company_size": []
+  },
+  "dealbreakers": []
+}
