@@ -110,10 +110,17 @@ def save_jobs(
 
         existing = conn.execute("SELECT 1 FROM jobs WHERE id = ?", (jid,)).fetchone()
         if existing:
-            conn.execute(
-                "UPDATE jobs SET last_seen = ?, score = ? WHERE id = ?",
-                (now, score_val, jid),
-            )
+            # Only update score if we have a real one (don't overwrite with None)
+            if score_val is not None:
+                conn.execute(
+                    "UPDATE jobs SET last_seen = ?, score = ?, matched_skills = ?, flags = ? WHERE id = ?",
+                    (now, score_val, matched_json, flags_json, jid),
+                )
+            else:
+                conn.execute(
+                    "UPDATE jobs SET last_seen = ? WHERE id = ?",
+                    (now, jid),
+                )
         else:
             conn.execute(
                 """INSERT INTO jobs
@@ -145,24 +152,28 @@ def save_jobs(
 
 def mark_closed(
     conn: sqlite3.Connection,
-    current_urls: set[str],
+    current_titles_companies: set[str],
     max_age_days: int = 7,
 ) -> int:
-    """Mark jobs as 'closed' if they were seen recently but are no longer
-    in the current collection.  Only considers jobs first seen within
-    *max_age_days* to avoid marking ancient jobs.
+    """Mark jobs as 'closed' if their title+company combo is no longer
+    in the current collection.  Uses title+company instead of URL to
+    avoid false positives from Greenhouse multi-location variants.
+
+    *current_titles_companies* should be a set of "title|company" strings
+    (lowercased).
 
     Returns the number of jobs marked closed.
     """
     cutoff = (datetime.now(timezone.utc) - timedelta(days=max_age_days)).isoformat()
     rows = conn.execute(
-        "SELECT id, url FROM jobs WHERE status = 'open' AND first_seen >= ?",
+        "SELECT id, title, company FROM jobs WHERE status = 'open' AND first_seen >= ?",
         (cutoff,),
     ).fetchall()
 
     closed = 0
     for row in rows:
-        if row["url"] and row["url"] not in current_urls:
+        key = f"{(row['title'] or '').lower().strip()}|{(row['company'] or '').lower().strip()}"
+        if key not in current_titles_companies:
             conn.execute(
                 "UPDATE jobs SET status = 'closed' WHERE id = ?", (row["id"],)
             )
@@ -199,6 +210,95 @@ def get_closed_jobs(
         (cutoff,),
     ).fetchall()
     return [dict(row) for row in rows]
+
+
+def get_long_open_jobs(
+    conn: sqlite3.Connection,
+    min_days: int = 7,
+    max_days: int = 30,
+) -> list[dict[str, Any]]:
+    """Return jobs that have been open for 7+ days — a positive signal.
+
+    These roles haven't been filled yet, so they may be worth applying to.
+    """
+    now = datetime.now(timezone.utc)
+    recent_cutoff = (now - timedelta(days=min_days)).isoformat()
+    old_cutoff = (now - timedelta(days=max_days)).isoformat()
+    rows = conn.execute(
+        "SELECT * FROM jobs WHERE status = 'open' "
+        "AND first_seen < ? AND first_seen >= ? AND (score IS NOT NULL AND score > 0) "
+        "ORDER BY score DESC",
+        (recent_cutoff, old_cutoff),
+    ).fetchall()
+    return [dict(row) for row in rows]
+
+
+_VALID_STATUSES = {"open", "closed", "applied", "interviewing", "rejected", "offer"}
+
+
+def set_status(
+    conn: sqlite3.Connection,
+    jid: str,
+    status: str,
+) -> bool:
+    """Manually set a job's application status.
+
+    Valid statuses: open, closed, applied, interviewing, rejected, offer.
+    Returns True if the job was found and updated.
+    """
+    if status not in _VALID_STATUSES:
+        raise ValueError(f"Invalid status '{status}'. Must be one of: {_VALID_STATUSES}")
+    result = conn.execute(
+        "UPDATE jobs SET status = ? WHERE id = ?", (status, jid)
+    )
+    conn.commit()
+    return result.rowcount > 0
+
+
+def get_jobs_by_status(
+    conn: sqlite3.Connection,
+    status: str,
+) -> list[dict[str, Any]]:
+    """Return all jobs with the given status, sorted by score descending."""
+    rows = conn.execute(
+        "SELECT * FROM jobs WHERE status = ? ORDER BY score DESC",
+        (status,),
+    ).fetchall()
+    return [dict(row) for row in rows]
+
+
+def get_application_funnel(conn: sqlite3.Connection) -> dict[str, int]:
+    """Return counts by status for the application funnel."""
+    rows = conn.execute(
+        "SELECT status, COUNT(*) as cnt FROM jobs GROUP BY status"
+    ).fetchall()
+    return {row["status"]: row["cnt"] for row in rows}
+
+
+def get_unscored_jobs(
+    conn: sqlite3.Connection,
+) -> list[dict[str, Any]]:
+    """Return jobs that have no score (NULL or 0), for backfill scoring."""
+    rows = conn.execute(
+        "SELECT * FROM jobs WHERE score IS NULL OR score = 0 "
+        "ORDER BY first_seen DESC",
+    ).fetchall()
+    return [dict(row) for row in rows]
+
+
+def update_score(
+    conn: sqlite3.Connection,
+    jid: str,
+    score: int,
+    matched_skills: list[str],
+    flags: list[str],
+) -> None:
+    """Update score fields for a single job by ID."""
+    conn.execute(
+        "UPDATE jobs SET score = ?, matched_skills = ?, flags = ? WHERE id = ?",
+        (score, json.dumps(matched_skills), json.dumps(flags), jid),
+    )
+    conn.commit()
 
 
 def get_history(

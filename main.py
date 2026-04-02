@@ -4,14 +4,18 @@ Steps:
   1. Load candidate profile (env var PROFILE_JSON or local profile.json)
   2. Run all collectors (adzuna, career_pages, remotive, hn_hiring)
   2b. Filter stale postings (>30 days old)
+  2c. Collapse title+company duplicates (Greenhouse multi-location)
   3. Deduplicate against the SQLite database
   4. Filter by location (remote or Twin Cities / Wisconsin)
+  4b. Negative keyword filter
   5. Score new jobs with scorer.py
+  5b. Backfill scoring for unscored DB jobs
   6. (Optional) LLM re-score jobs above 60 if USE_LLM_SCORING=true
-  7. Build HTML email digest (with still-open and recently-closed sections)
+  7. Build HTML email digest (with still-open, long-open, and recently-closed)
   8. Send email via Brevo SMTP
   9. Persist all jobs to the database
   9b. Detect closed jobs (no longer in current collection)
+  9c. Generate dashboard for GitHub Pages
  10. Print summary
 
 Usage:
@@ -77,6 +81,17 @@ _NON_US_RE = re.compile(
     re.I,
 )
 
+# Negative keywords — skip jobs containing these terms in title or description
+_NEGATIVE_RE = re.compile(
+    r"\b("
+    r"intern\b|internship|part[- ]time|clearance\s+required|"
+    r"security\s+clearance|ts/sci|polygraph|"
+    r"on[- ]site\s+only|no\s+remote|"
+    r"unpaid|volunteer|equity[- ]only"
+    r")\b",
+    re.I,
+)
+
 
 # ---------------------------------------------------------------------------
 # 1. Profile loading
@@ -121,7 +136,6 @@ def _is_recent(job: dict[str, Any]) -> bool:
     if not dp:
         return True  # no date = assume current
     try:
-        # Handle various ISO formats
         clean = dp.replace("Z", "+00:00")
         if "T" in clean:
             posted = datetime.fromisoformat(clean)
@@ -130,7 +144,27 @@ def _is_recent(job: dict[str, Any]) -> bool:
         cutoff = datetime.now(timezone.utc) - timedelta(days=MAX_JOB_AGE_DAYS)
         return posted >= cutoff
     except (ValueError, TypeError):
-        return True  # unparseable date = keep it
+        return True
+
+
+# ---------------------------------------------------------------------------
+# 2c. Title+company dedup (Greenhouse multi-location collapse)
+# ---------------------------------------------------------------------------
+
+def _dedupe_by_title_company(jobs: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Collapse jobs with the same title+company (different URL variants).
+
+    Greenhouse often posts one role with multiple location-specific URLs.
+    Keep the first occurrence and drop the rest.
+    """
+    seen: set[str] = set()
+    unique: list[dict[str, Any]] = []
+    for job in jobs:
+        key = f"{job.get('title', '').lower().strip()}|{job.get('company', '').lower().strip()}"
+        if key not in seen:
+            seen.add(key)
+            unique.append(job)
+    return unique
 
 
 # ---------------------------------------------------------------------------
@@ -154,7 +188,7 @@ def _deduplicate(
 
 
 # ---------------------------------------------------------------------------
-# 4. Location filter
+# 4. Location filter + 4b. Negative keyword filter
 # ---------------------------------------------------------------------------
 
 def _matches_location(job: dict[str, Any]) -> bool:
@@ -163,10 +197,15 @@ def _matches_location(job: dict[str, Any]) -> bool:
         job.get("title", ""),
         (job.get("description", "") or "")[:500],
     ])
-    # Reject non-US remote postings
     if _NON_US_RE.search(text):
         return False
     return bool(_LOCAL_RE.search(text) or _REMOTE_RE.search(text))
+
+
+def _passes_negative_filter(job: dict[str, Any]) -> bool:
+    """Return False if the job contains negative keywords (intern, part-time, etc.)."""
+    text = f"{job.get('title', '')} {(job.get('description', '') or '')[:500]}"
+    return not _NEGATIVE_RE.search(text)
 
 
 # ---------------------------------------------------------------------------
@@ -205,6 +244,12 @@ def run() -> None:
     raw_jobs = [j for j in raw_jobs if _is_recent(j)]
     print(f"After age filter (≤{MAX_JOB_AGE_DAYS}d): {len(raw_jobs)}", file=sys.stderr)
 
+    # 2c. Collapse Greenhouse multi-location duplicates
+    before = len(raw_jobs)
+    raw_jobs = _dedupe_by_title_company(raw_jobs)
+    if len(raw_jobs) < before:
+        print(f"After title+company dedup: {len(raw_jobs)} (removed {before - len(raw_jobs)})", file=sys.stderr)
+
     # 3. Deduplicate
     conn = db.init_db()
     new_jobs = _deduplicate(raw_jobs, conn)
@@ -213,6 +258,10 @@ def run() -> None:
     # 4. Location filter
     filtered = [j for j in new_jobs if _matches_location(j)]
     print(f"After location filter: {len(filtered)}", file=sys.stderr)
+
+    # 4b. Negative keyword filter
+    filtered = [j for j in filtered if _passes_negative_filter(j)]
+    print(f"After negative keyword filter: {len(filtered)}", file=sys.stderr)
 
     if not filtered:
         print("No new jobs after filtering — saving raw and exiting.", file=sys.stderr)
@@ -224,20 +273,41 @@ def run() -> None:
     scored = score_jobs(filtered, profile)
     print(f"Scored {len(scored)} jobs", file=sys.stderr)
 
+    # 5b. Backfill: re-score any DB jobs that have NULL/0 scores
+    unscored = db.get_unscored_jobs(conn)
+    if unscored:
+        print(f"Backfill scoring {len(unscored)} unscored DB jobs …", file=sys.stderr)
+        from scorer import score_job, _load_target_companies
+        profile_with_boost = {**profile, "_target_companies": _load_target_companies()}
+        backfilled = 0
+        for uj in unscored:
+            if not uj.get("description"):
+                continue
+            result = score_job(uj, profile_with_boost)
+            jid = db.job_id(uj.get("title", ""), uj.get("company", ""), uj.get("url", ""))
+            db.update_score(
+                conn, jid, result["score"],
+                result["matched_skills"], result["flags"],
+            )
+            backfilled += 1
+        print(f"  Backfilled {backfilled} jobs", file=sys.stderr)
+
     # 6. Optional LLM re-scoring
     if os.environ.get("USE_LLM_SCORING", "").lower() == "true":
         scored = _llm_rescore(scored, profile)
 
-    # 7. Build digest (with still-open and recently-closed sections)
+    # 7. Build digest (with still-open, long-open, and recently-closed sections)
     today = date.today()
     still_open = db.get_open_jobs(conn, days=7)
     recently_closed = db.get_closed_jobs(conn, days=3)
+    long_open = db.get_long_open_jobs(conn, min_days=7, max_days=30)
     # Exclude today's new jobs from still-open (they're in the main section)
     new_urls = {j.get("url") for j in scored}
     still_open = [j for j in still_open if j.get("url") not in new_urls]
     html_body = generate_digest(
         scored, run_date=today,
         still_open=still_open, recently_closed=recently_closed,
+        long_open=long_open,
     )
 
     # 8. Send email
@@ -251,17 +321,29 @@ def run() -> None:
             print(f"Email send failed: {exc}", file=sys.stderr)
 
     # 9. Save all jobs (raw + scored) to DB
-    #    scored jobs have _score; raw jobs that didn't pass filters still get saved
-    #    so we don't re-process them next run.
     saved_new = db.save_jobs(conn, raw_jobs)
-    # Update scores for the filtered/scored subset
     db.save_jobs(conn, scored)
 
-    # 9b. Detect closed jobs (no longer in current collection)
-    current_urls = {j.get("url", "") for j in raw_jobs if j.get("url")}
-    closed_count = db.mark_closed(conn, current_urls)
+    # 9b. Detect closed jobs (title+company key instead of URL to avoid false positives)
+    current_keys = {
+        f"{j.get('title', '').lower().strip()}|{j.get('company', '').lower().strip()}"
+        for j in raw_jobs
+    }
+    closed_count = db.mark_closed(conn, current_keys)
     if closed_count:
         print(f"Marked {closed_count} jobs as closed", file=sys.stderr)
+
+    # 9c. Generate dashboard
+    try:
+        from dashboard import generate_dashboard
+        from pathlib import Path
+        docs_dir = Path(__file__).resolve().parent / "docs"
+        docs_dir.mkdir(exist_ok=True)
+        html = generate_dashboard(conn)
+        (docs_dir / "index.html").write_text(html)
+        print(f"Dashboard written to docs/index.html", file=sys.stderr)
+    except Exception as exc:
+        print(f"Dashboard generation failed: {exc}", file=sys.stderr)
 
     conn.close()
 
