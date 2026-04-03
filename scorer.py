@@ -44,23 +44,24 @@ def _has(haystack: str, needle: str) -> bool:
 # 1. Title match  (0–30)
 # ---------------------------------------------------------------------------
 
-# Patterns that count as "adjacent" engineering titles
+# Patterns that count as "adjacent" engineering titles (including mid-level)
 _ADJACENT_PATTERNS: list[re.Pattern[str]] = [
-    re.compile(r"\bsoftware\s+engineer\s*(ii|iii|iv)?\b", re.I),
+    re.compile(r"\bsoftware\s+(engineer|developer)\s*(i|ii|iii|iv)?\b", re.I),
     re.compile(r"\bfull[- ]?stack\s+(developer|engineer)\b", re.I),
     re.compile(r"\bfront[- ]?end\s+(developer|engineer)\b", re.I),
     re.compile(r"\bback[- ]?end\s+(developer|engineer)\b", re.I),
-    re.compile(r"\bplatform\s+engineer\b", re.I),
-    re.compile(r"\bcloud\s+engineer\b", re.I),
-    re.compile(r"\bdata\s+engineer\b", re.I),
-    re.compile(r"\bsde\b", re.I),
+    re.compile(r"\bweb\s+developer\b", re.I),
+    re.compile(r"\bapplication\s+developer\b", re.I),
+    re.compile(r"\bjava\s+developer\b", re.I),
+    re.compile(r"\breact\s+developer\b", re.I),
+    re.compile(r"\bsde\s*[12]?\b", re.I),
     re.compile(r"\bswe\b", re.I),
 ]
 
 # Tokens that help detect a "partial" title match
 _TITLE_TOKENS = [
-    "senior", "staff", "principal", "lead",
-    "engineer", "developer", "sde", "swe",
+    "software", "engineer", "developer", "sde", "swe",
+    "full stack", "fullstack", "frontend", "backend",
 ]
 
 
@@ -257,9 +258,6 @@ def _score_industry(
 # ---------------------------------------------------------------------------
 
 _DEALBREAKER_PATTERNS: dict[str, re.Pattern[str]] = {
-    "junior scope": re.compile(
-        r"\b(junior|entry[- ]level|intern\b|internship)\b", re.I,
-    ),
     "contract under 6 months": re.compile(
         r"\b(contract|temp)\b.*?\b([1-5]\s+month|short[- ]term)\b", re.I,
     ),
@@ -285,6 +283,16 @@ _DEALBREAKER_PATTERNS: dict[str, re.Pattern[str]] = {
         r"|Uber|Lyft|Airbnb|Snap|Twitter|Salesforce|Oracle|IBM"
         r"|Intel|Cisco|Adobe|LinkedIn)\b", re.I,
     ),
+    "hustle culture": re.compile(
+        r"\b(move\s+fast|fast[- ]paced\s+environment|hustle|grind"
+        r"|wear\s+many\s+hats|ownership\s+mentality|high\s+accountability"
+        r"|thrive\s+in\s+chaos|thrive\s+in\s+ambiguity"
+        r"|scrappy|do\s+whatever\s+it\s+takes)\b", re.I,
+    ),
+    "stack ranking": re.compile(
+        r"\b(stack\s+rank|forced\s+(distribution|ranking|curve)"
+        r"|performance\s+curve|rank\s+and\s+yank|calibration\s+curve)\b", re.I,
+    ),
 }
 
 # Company names that indicate a FAANG/big-tech employer (checked against job company field)
@@ -294,6 +302,22 @@ _BLOCKED_COMPANIES: set[str] = {
     "salesforce", "oracle", "ibm", "intel", "cisco", "adobe", "linkedin",
     "palantir", "chewy",
 }
+
+# Patterns that deprioritize (small penalty, not dealbreaker)
+_DEPRIORITIZE_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
+    ("pure AI/ML role", re.compile(
+        r"\b(machine\s+learning\s+engineer|ml\s+engineer|ai\s+engineer"
+        r"|deep\s+learning|neural\s+network|model\s+training"
+        r"|nlp\s+engineer|computer\s+vision\s+engineer)\b", re.I,
+    )),
+    ("deep infra/platform", re.compile(
+        r"\b(platform\s+engineer|infrastructure\s+engineer|site\s+reliability"
+        r"|sre\b|devops\s+engineer|cloud\s+architect)\b", re.I,
+    )),
+    ("C++ or COBOL", re.compile(
+        r"\b(C\+\+|COBOL)\b",
+    )),
+]
 
 _OVERQUALIFIED_RE = re.compile(
     r"\b([1-5])\s*[\-–to]+\s*([3-7])\s*\+?\s*year", re.I,
@@ -321,6 +345,13 @@ def _score_penalties(
             penalty -= 15
             flags.append(f"dealbreaker: {label}")
             break  # one dealbreaker is enough to flag
+
+    # Deprioritize (smaller penalty, not a hard dealbreaker)
+    for label, pattern in _DEPRIORITIZE_PATTERNS:
+        if pattern.search(text):
+            penalty -= 5
+            flags.append(f"deprioritize: {label}")
+            break
 
     m = _OVERQUALIFIED_RE.search(description)
     if m:

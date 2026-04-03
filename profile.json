@@ -1,74 +1,83 @@
 {
   "name": "Nadine Beckwith",
-  "headline": "Senior Software Engineer | Full-Stack | Cloud & Data Platform Engineering",
-  "summary": "Senior Software Engineer with 10+ years of experience delivering production-grade systems across frontend, backend, cloud infrastructure, and data platforms. Proven track record in high-impact UI systems, cloud and data migrations, security-conscious development, and operational ownership in large-scale, regulated environments. Translates business priorities into scalable technical solutions and owns delivery end-to-end.",
+  "headline": "Full-Stack Software Engineer | React/TypeScript + Spring Boot | Stability-Focused",
+  "summary": "Full-stack Software Engineer with 10+ years of experience across frontend, backend, cloud, and data platforms. Strongest in React/TypeScript frontend and growing Spring Boot backend skills. Proven track record in execution, triage, and collaboration. Seeking stable, mid-level engineering roles at calm, process-oriented teams with structured onboarding and psychological safety. Open to SDE1/SDE2 and mid-level positions — optimizing for sustainability, not career climbing.",
   "target_titles": [
-    "Senior Software Engineer",
-    "Staff Software Engineer",
+    "Software Engineer",
+    "Software Engineer I",
+    "Software Engineer II",
     "Software Engineer III",
-    "Software Engineer IV",
+    "Software Development Engineer",
+    "Software Development Engineer I",
+    "Software Development Engineer II",
+    "Full Stack Engineer",
+    "Full Stack Developer",
+    "Frontend Engineer",
+    "Frontend Developer",
+    "Backend Engineer",
+    "Backend Developer",
+    "Senior Software Engineer",
     "Senior Full Stack Engineer",
     "Senior Frontend Engineer",
     "Senior Backend Engineer",
-    "Senior Platform Engineer",
-    "Senior Cloud Engineer",
-    "Senior Data Engineer",
-    "Lead Software Engineer",
-    "Principal Software Engineer",
-    "Software Development Engineer II",
-    "Software Development Engineer III",
-    "System Development Engineer"
+    "Web Developer",
+    "Application Developer",
+    "Java Developer",
+    "React Developer"
   ],
   "skills": {
     "high": [
       "React",
       "TypeScript",
-      "AWS",
-      "Terraform",
-      "Python",
-      "Snowflake",
+      "JavaScript",
       "Java",
-      "Node.js",
-      "PostgreSQL",
+      "Spring Boot",
+      "SQL",
+      "full-stack",
       "REST APIs",
-      "event-driven",
-      "cloud infrastructure",
-      "data migration",
-      "full-stack"
+      "Agile"
     ],
     "medium": [
-      "Next.js",
-      "JavaScript",
-      "SQL",
-      "Spring Boot",
+      "AWS",
+      "PostgreSQL",
+      "Docker",
+      "Node.js",
+      "Python",
+      "Jenkins",
+      "Gradle",
+      "Datadog",
+      "Kubernetes",
       "Lambda",
-      "S3",
-      "IAM",
-      "KMS",
-      "Secrets Manager",
-      "SNS",
-      "SQS",
-      "Ruby on Rails",
-      "integration testing",
-      "Jest",
-      "React Testing Library",
-      "Agile",
+      "EC2",
+      "ECS",
+      "RDS",
+      "CloudWatch",
+      "CDK",
       "Scrum",
+      "Kanban",
       "Jira",
       "cross-functional",
-      "design systems"
+      "code review",
+      "on-call"
     ],
     "low": [
+      "Snowflake",
+      "Redshift",
+      "Terraform",
+      "Dynatrace",
+      "S3",
+      "SNS",
+      "SQS",
+      "IAM",
       "Vertica",
       "SSRS",
-      "SSIS",
-      "database management",
-      "technical writing",
-      "Workday",
-      "performance optimization",
       "ETL",
       "Linux",
-      "shell scripting"
+      "shell scripting",
+      "design systems",
+      "integration testing",
+      "Jest",
+      "React Testing Library"
     ]
   },
   "skill_variants": {
@@ -83,25 +92,10 @@
       "TS",
       "typed JavaScript"
     ],
-    "AWS": [
-      "Amazon Web Services",
-      "cloud services",
-      "AWS cloud"
-    ],
-    "Terraform": [
-      "infrastructure as code",
-      "IaC",
-      "Terraform modules",
-      "HCL"
-    ],
-    "Python": [
-      "Python3",
-      "Python 3"
-    ],
-    "Snowflake": [
-      "Snowflake data warehouse",
-      "Snowflake analytics",
-      "data warehouse"
+    "JavaScript": [
+      "JS",
+      "ES6",
+      "ECMAScript"
     ],
     "Java": [
       "Java 11",
@@ -109,17 +103,24 @@
       "JVM",
       "Java SE"
     ],
-    "Node.js": [
-      "NodeJS",
-      "Node",
-      "Express",
-      "Express.js"
+    "Spring Boot": [
+      "Spring Framework",
+      "Spring MVC",
+      "Spring",
+      "Spring Boot application"
     ],
-    "PostgreSQL": [
-      "Postgres",
-      "PostgreSQL database",
-      "RDS",
-      "Amazon RDS"
+    "SQL": [
+      "complex queries",
+      "CTEs",
+      "stored procedures",
+      "relational databases",
+      "database"
+    ],
+    "full-stack": [
+      "full stack",
+      "fullstack",
+      "front-end and back-end",
+      "frontend and backend"
     ],
     "REST APIs": [
       "RESTful",
@@ -128,73 +129,49 @@
       "API design",
       "microservices"
     ],
-    "event-driven": [
-      "event-driven architecture",
-      "event driven",
-      "message queue",
-      "pub/sub",
-      "event bus"
+    "AWS": [
+      "Amazon Web Services",
+      "cloud services",
+      "AWS cloud"
     ],
-    "cloud infrastructure": [
-      "cloud platform",
-      "cloud architecture",
-      "cloud native",
-      "cloud-native",
-      "infrastructure"
+    "PostgreSQL": [
+      "Postgres",
+      "PostgreSQL database",
+      "Amazon RDS"
     ],
-    "data migration": [
-      "data platform",
-      "database migration",
-      "data pipeline",
-      "data engineering",
-      "ETL pipeline"
+    "Docker": [
+      "containers",
+      "containerized",
+      "Docker image"
     ],
-    "full-stack": [
-      "full stack",
-      "fullstack",
-      "front-end and back-end",
-      "frontend and backend"
+    "Kubernetes": [
+      "K8s",
+      "EKS",
+      "orchestration"
     ],
-    "Next.js": [
-      "NextJS",
-      "Next"
+    "Node.js": [
+      "NodeJS",
+      "Node",
+      "Express",
+      "Express.js"
     ],
-    "JavaScript": [
-      "JS",
-      "ES6",
-      "ECMAScript"
+    "Python": [
+      "Python3",
+      "Python 3"
     ],
-    "SQL": [
-      "complex queries",
-      "CTEs",
-      "stored procedures",
-      "relational databases"
+    "Jenkins": [
+      "CI/CD",
+      "continuous integration",
+      "build pipeline"
     ],
-    "Spring Boot": [
-      "Spring Framework",
-      "Spring MVC",
-      "Spring"
+    "Datadog": [
+      "observability",
+      "monitoring",
+      "APM"
     ],
     "Lambda": [
       "AWS Lambda",
-      "serverless",
-      "serverless functions"
-    ],
-    "S3": [
-      "AWS S3",
-      "object storage",
-      "S3 bucket"
-    ],
-    "integration testing": [
-      "integration tests",
-      "end-to-end testing",
-      "e2e testing",
-      "test automation"
-    ],
-    "Jest": [
-      "unit testing",
-      "test framework",
-      "JavaScript testing"
+      "serverless"
     ],
     "Agile": [
       "agile methodologies",
@@ -206,32 +183,59 @@
       "sprint",
       "scrum ceremonies"
     ],
+    "Kanban": [
+      "kanban board",
+      "scrumban"
+    ],
+    "Snowflake": [
+      "Snowflake data warehouse",
+      "data warehouse"
+    ],
+    "Redshift": [
+      "Amazon Redshift",
+      "data warehouse"
+    ],
+    "Terraform": [
+      "infrastructure as code",
+      "IaC",
+      "HCL"
+    ],
     "cross-functional": [
       "cross functional",
-      "interdisciplinary",
-      "collaborative"
+      "collaborative",
+      "interdisciplinary"
     ],
-    "design systems": [
-      "component library",
-      "shared components",
-      "UI library",
-      "design system"
+    "code review": [
+      "pull request",
+      "PR review",
+      "peer review"
     ],
-    "Ruby on Rails": [
-      "Rails",
-      "RoR",
-      "Ruby"
-    ],
-    "performance optimization": [
-      "performance tuning",
-      "optimization",
-      "scalability",
-      "high performance"
+    "on-call": [
+      "on call",
+      "pager duty",
+      "PagerDuty",
+      "incident response"
     ],
     "ETL": [
       "extract transform load",
       "data pipeline",
       "data ingestion"
+    ],
+    "design systems": [
+      "component library",
+      "shared components",
+      "UI library"
+    ],
+    "integration testing": [
+      "integration tests",
+      "end-to-end testing",
+      "e2e testing",
+      "test automation"
+    ],
+    "Jest": [
+      "unit testing",
+      "test framework",
+      "JavaScript testing"
     ]
   },
   "experience": {
@@ -255,9 +259,19 @@
       "SaaS",
       "cloud",
       "data analytics",
-      "operations"
+      "operations",
+      "supply chain"
     ],
     "roles": [
+      {
+        "title": "Technician",
+        "company": "Creative Colors International",
+        "dates": "Mar 2026 – Present",
+        "highlights": [
+          "Vinyl, plastic, and leather upholstery repair",
+          "Part-time while seeking return to software engineering"
+        ]
+      },
       {
         "title": "Software Engineer",
         "company": "Chewy",
@@ -311,11 +325,12 @@
     "covid_dashboard_delivery": "2 weeks",
     "years_experience": "10+"
   },
-  "resume_context": "Nadine Beckwith is a Senior Software Engineer with 10+ years of experience at Amazon (6 years across 2 roles), Chewy (3 years), and Federated Investors (3 years). Education: IT degree from Point Park University, History degree from Cal U of PA. At Chewy, she built event-driven ingestion pipelines (S3/Lambda/Terraform), migrated analytics from Vertica to Snowflake, led zero-downtime RDS migrations across AWS accounts, owned large-scale React/TypeScript UI components, designed org-based access control, supported robotics fulfillment launches (<0.1% defect rate), and led shared React component pattern adoption. At Amazon (SDE II), she designed scalable data visualization apps in Amazon's metrics platform, led end-to-end COVID-19 social distancing dashboard development (delivered in 2 weeks), worked with international legal on privacy compliance, and mentored an L4 to L5 promotion. At Amazon (Program Developer), she built defect monitoring dashboards and productivity tracking tools. At Federated Investors, she built SSRS/VBA reporting solutions, automated batch workflows, and maintained SEC compliance. Core strengths: full-stack development (React/TypeScript/Java/Python), cloud infrastructure (AWS — S3, Lambda, SNS, SQS, IAM, KMS, Terraform), data platform engineering (Snowflake, Vertica, PostgreSQL, ETL), production operations, access control systems, and delivering under tight timelines in regulated environments.",
+  "resume_context": "Nadine Beckwith is a full-stack Software Engineer with 10+ years of experience at Amazon (6 years, 2 roles), Chewy (3 years), and Federated Investors (3 years). Currently doing part-time upholstery work while seeking return to engineering. Education: IT degree from Point Park University, History degree from Cal U of PA. Strongest in frontend (React/TypeScript/JavaScript — proven track record) with growing backend skills (Spring Boot — recent enjoyment, slightly less depth). Open to SDE1/SDE2/mid-level roles — not career climbing, optimizing for stability and psychological safety. At Chewy: built event-driven pipelines (S3/Lambda/Terraform), migrated Vertica to Snowflake, led zero-downtime RDS migrations, owned React/TS UI components, designed org-based access control, supported robotics launch (<0.1% defect rate), led shared component patterns. At Amazon (SDE II): designed data viz apps in metrics platform, led COVID-19 dashboard (delivered in 2 weeks), worked with international legal on privacy, mentored L4 to L5. At Amazon (Program Developer): defect monitoring dashboards, productivity tracking tools. At Federated Investors: SSRS/VBA reporting in regulated environment, automated batch workflows, SEC compliance. Strengths: execution, triage/incident response, collaboration, independent ticket execution, honest about gaps. Known gaps: deep infrastructure/platform engineering, not a deep backend expert yet. Best fit: Java/Spring-based full-stack shops, React/TypeScript frontend roles, calm process-oriented teams with structured onboarding, 100-1000 employee companies.",
   "preferences": {
     "work_arrangement": [
       "remote"
     ],
+    "schedule": "Prefers early schedule (~7am-3:30/4pm), not a hard dealbreaker",
     "locations": [
       "Roberts, WI",
       "Hudson, WI",
@@ -348,17 +363,30 @@
       "Eagan, MN"
     ],
     "company_size": [
-      "startup",
       "small",
       "mid-size"
     ],
-    "ideal_employee_count": "under 1000, ideally around 100",
+    "ideal_employee_count": "100-1000 employees, ideally around 100",
     "priority_industries": [
       "financial services",
       "fintech",
       "banking",
       "investing",
       "accounting"
+    ],
+    "compensation": {
+      "minimum_w2": 100000,
+      "target_range": "120000-150000",
+      "minimum_contract": 140000,
+      "health_insurance_required": true
+    },
+    "culture_priorities": [
+      "psychological safety",
+      "trust-based management",
+      "structured onboarding",
+      "collaborative team dynamic",
+      "clear escalation paths",
+      "process and documentation"
     ]
   },
   "dealbreakers": [
@@ -367,6 +395,17 @@
     "unpaid or equity-only compensation",
     "politics or political organizations",
     "press or media organizations",
-    "FAANG or big tech companies"
+    "FAANG or big tech companies",
+    "hustle culture or move-fast branding",
+    "stack ranking or forced performance distribution",
+    "no onboarding or sink-or-swim culture",
+    "relocation required",
+    "no health insurance on W2"
+  ],
+  "deprioritize": [
+    "pure AI/ML engineering roles",
+    "deep infrastructure/platform engineering",
+    "C++ or COBOL roles",
+    "startup chaos with no process"
   ]
 }

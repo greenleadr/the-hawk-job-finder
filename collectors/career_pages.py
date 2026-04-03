@@ -21,22 +21,19 @@ from urllib.request import Request, urlopen
 
 _COMPANIES_PATH = Path(__file__).resolve().parent.parent / "companies.json"
 
-# Titles we care about — must match software engineering roles at senior+ level
+# Titles we care about — software engineering roles (mid-level and above)
 _ENGINEERING_RE = re.compile(
-    r"\b(software|platform|cloud|data|full[- ]?stack|front[- ]?end|back[- ]?end|systems?)\b",
+    r"\b(software|full[- ]?stack|front[- ]?end|back[- ]?end|web|application|java|react)\b",
     re.I,
 )
 _ROLE_RE = re.compile(
     r"\b(engineer|developer|sde|swe)\b",
     re.I,
 )
-_SENIORITY_RE = re.compile(
-    r"\b("
-    r"senior|sr\.?|staff|principal|lead|"
-    r"ii\b|iii\b|iv\b|"
-    r"sde\s*(ii|iii)|"
-    r"software\s+development\s+engineer"
-    r")\b",
+# No strict seniority filter — open to mid-level (SDE1/SDE2) through senior
+# But exclude intern/junior/co-op
+_EXCLUDE_LEVEL_RE = re.compile(
+    r"\b(intern\b|internship|co[- ]?op|junior|entry[- ]level|new\s+grad)\b",
     re.I,
 )
 
@@ -52,7 +49,7 @@ def _is_target_role(title: str) -> bool:
     return bool(
         _ENGINEERING_RE.search(title)
         and _ROLE_RE.search(title)
-        and _SENIORITY_RE.search(title)
+        and not _EXCLUDE_LEVEL_RE.search(title)
     )
 
 

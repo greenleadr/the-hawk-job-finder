@@ -21,16 +21,14 @@ from urllib.request import Request, urlopen
 BASE_URL = "https://api.adzuna.com/v1/api/jobs/us/search"
 
 SEARCH_TITLES = [
+    "Software Engineer",
+    "Full Stack Engineer",
+    "Full Stack Developer",
+    "Frontend Engineer",
+    "Backend Engineer",
+    "Java Developer",
+    "React Developer",
     "Senior Software Engineer",
-    "Staff Software Engineer",
-    "Senior Full Stack Engineer",
-    "Senior Frontend Engineer",
-    "Senior Backend Engineer",
-    "Senior Platform Engineer",
-    "Senior Cloud Engineer",
-    "Senior Data Engineer",
-    "Lead Software Engineer",
-    "Principal Software Engineer",
     "Software Development Engineer",
 ]
 

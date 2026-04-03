@@ -20,22 +20,24 @@ API_URLS = [
     "https://remotive.com/api/remote-jobs?category=data",
 ]
 
-_SENIOR_TITLE_RE = re.compile(
+# Match software engineering roles at any level (mid through senior)
+# Excludes intern/junior/co-op
+_TITLE_RE = re.compile(
     r"\b("
-    r"senior\s+(software\s+)?engineer|"
-    r"sr\.?\s+(software\s+)?engineer|"
-    r"staff\s+(software\s+)?engineer|"
-    r"principal\s+(software\s+)?engineer|"
-    r"lead\s+(software\s+)?engineer|"
-    r"software\s+development\s+engineer|"
-    r"sde\s*(ii|iii|iv)|"
-    r"senior\s+full[- ]?stack|"
-    r"senior\s+front[- ]?end|"
-    r"senior\s+back[- ]?end|"
-    r"senior\s+platform\s+engineer|"
-    r"senior\s+cloud\s+engineer|"
-    r"senior\s+data\s+engineer"
+    r"software\s+(engineer|developer)|"
+    r"full[- ]?stack\s+(engineer|developer)|"
+    r"front[- ]?end\s+(engineer|developer)|"
+    r"back[- ]?end\s+(engineer|developer)|"
+    r"web\s+developer|"
+    r"java\s+developer|"
+    r"react\s+developer|"
+    r"application\s+developer|"
+    r"sde\b|swe\b"
     r")\b",
+    re.I,
+)
+_EXCLUDE_RE = re.compile(
+    r"\b(intern\b|internship|co[- ]?op|junior|entry[- ]level|new\s+grad)\b",
     re.I,
 )
 
@@ -61,8 +63,8 @@ def _fetch(url: str, retries: int = 3) -> dict[str, Any]:
     raise RuntimeError(f"Request failed after {retries} retries: {url}")
 
 
-def _is_senior(title: str) -> bool:
-    return bool(_SENIOR_TITLE_RE.search(title))
+def _is_target_role(title: str) -> bool:
+    return bool(_TITLE_RE.search(title) and not _EXCLUDE_RE.search(title))
 
 
 def _parse_job(job: dict[str, Any]) -> dict[str, Any]:
@@ -102,7 +104,7 @@ def search_jobs() -> list[dict[str, Any]]:
         count = 0
         for raw in all_jobs:
             title = raw.get("title", "")
-            if _is_senior(title):
+            if _is_target_role(title):
                 parsed = _parse_job(raw)
                 if parsed["url"] and parsed["url"] not in seen_urls:
                     seen_urls.add(parsed["url"])
@@ -110,7 +112,7 @@ def search_jobs() -> list[dict[str, Any]]:
                     count += 1
         print(f"{len(all_jobs)} jobs, {count} senior matches", file=sys.stderr)
 
-    print(f"  After senior-title filter: {len(results)} jobs", file=sys.stderr)
+    print(f"  After title filter: {len(results)} jobs", file=sys.stderr)
     return results
 
 

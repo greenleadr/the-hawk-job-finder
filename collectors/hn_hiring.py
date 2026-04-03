@@ -30,13 +30,12 @@ ITEM_URL = "https://hn.algolia.com/api/v1/items/{item_id}"
 
 # Title filter — engineering roles at senior+ level
 _ENGINEERING_RE = re.compile(
-    r"\b(software|platform|cloud|data|full[- ]?stack|front[- ]?end|back[- ]?end|"
-    r"systems?|devops|sre|infrastructure)\b",
+    r"\b(software|full[- ]?stack|front[- ]?end|back[- ]?end|web|application|java|react)\b",
     re.I,
 )
-_ROLE_RE = re.compile(r"\b(engineer|developer|sde|swe|architect)\b", re.I)
-_SENIORITY_RE = re.compile(
-    r"\b(senior|sr\.?|staff|principal|lead|ii\b|iii\b|iv\b)\b",
+_ROLE_RE = re.compile(r"\b(engineer|developer|sde|swe)\b", re.I)
+_EXCLUDE_LEVEL_RE = re.compile(
+    r"\b(intern\b|internship|co[- ]?op|junior|entry[- ]level|new\s+grad)\b",
     re.I,
 )
 
@@ -81,11 +80,11 @@ def _find_latest_thread() -> int | None:
 
 
 def _is_target_role(text: str) -> bool:
-    """Check if the text mentions a senior engineering role."""
+    """Check if the text mentions a software engineering role (mid-level+)."""
     return bool(
         _ENGINEERING_RE.search(text)
         and _ROLE_RE.search(text)
-        and _SENIORITY_RE.search(text)
+        and not _EXCLUDE_LEVEL_RE.search(text)
     )
 
 
