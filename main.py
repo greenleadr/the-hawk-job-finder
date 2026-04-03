@@ -368,6 +368,10 @@ def run() -> None:
     still_open = db.get_open_jobs(conn, days=7)
     recently_closed = db.get_closed_jobs(conn, days=3)
     long_open = db.get_long_open_jobs(conn, min_days=7, max_days=30)
+    # Apply location filter to DB sections (they contain all collected jobs, not just local)
+    still_open = [j for j in still_open if _matches_location(j)]
+    recently_closed = [j for j in recently_closed if _matches_location(j)]
+    long_open = [j for j in long_open if _matches_location(j)]
     # Exclude today's new jobs from still-open (they're in the main section)
     new_urls = {j.get("url") for j in scored}
     still_open = [j for j in still_open if j.get("url") not in new_urls]

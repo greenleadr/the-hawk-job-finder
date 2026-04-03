@@ -201,14 +201,17 @@ def generate_dashboard(conn: sqlite3.Connection, run_date: date | None = None) -
         overrides = {}
         track_funnel = {}
 
-    all_7d = db.get_history(conn, days=7)
+    # Import location filter to exclude non-local jobs from dashboard
+    from main import _matches_location
+
+    all_7d = [j for j in db.get_history(conn, days=7) if _matches_location(j)]
     for j in all_7d:
         ov = overrides.get(j.get("id"))
         if ov:
             j["status"] = ov["status"]
-    open_jobs = db.get_open_jobs(conn, days=7)
-    closed_jobs = db.get_closed_jobs(conn, days=7)
-    all_30d = db.get_history(conn, days=30)
+    open_jobs = [j for j in db.get_open_jobs(conn, days=7) if _matches_location(j)]
+    closed_jobs = [j for j in db.get_closed_jobs(conn, days=7) if _matches_location(j)]
+    all_30d = [j for j in db.get_history(conn, days=30) if _matches_location(j)]
 
     total_7d = len(all_7d)
     total_open = len(open_jobs)

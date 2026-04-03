@@ -81,10 +81,11 @@ def generate_weekly_summary(conn, run_date: date | None = None) -> str:
     date_str = today.strftime("%B %d, %Y")
     week_range = f"{week_start.strftime('%b %d')} \u2013 {today.strftime('%b %d, %Y')}"
 
-    all_week = db.get_history(conn, days=7)
-    open_jobs = db.get_open_jobs(conn, days=7)
-    closed_jobs = db.get_closed_jobs(conn, days=7)
-    long_open = db.get_long_open_jobs(conn, min_days=7, max_days=30)
+    from main import _matches_location
+    all_week = [j for j in db.get_history(conn, days=7) if _matches_location(j)]
+    open_jobs = [j for j in db.get_open_jobs(conn, days=7) if _matches_location(j)]
+    closed_jobs = [j for j in db.get_closed_jobs(conn, days=7) if _matches_location(j)]
+    long_open = [j for j in db.get_long_open_jobs(conn, min_days=7, max_days=30) if _matches_location(j)]
     funnel = db.get_application_funnel(conn)
 
     total = len(all_week)
