@@ -74,22 +74,48 @@ _LOCAL_RE = re.compile(
 _REMOTE_RE = re.compile(
     r"\b(remote|work\s+from\s+home|distributed|anywhere)\b", re.I,
 )
-# Reject non-US remote postings
+# Reject non-US remote postings — matches countries, regions, and non-US cities
 _NON_US_RE = re.compile(
     r"\b(europe\s+only|eu\s+only|uk\s+only|emea\s+only|apac\s+only"
     r"|canada\s+only|latam\s+only|india\s+only|australia\s+only)\b",
     re.I,
 )
 
+# Non-US locations — if these appear in the location field, reject
+_FOREIGN_LOCATION_RE = re.compile(
+    r"\b("
+    # Countries
+    r"argentina|brazil|mexico|colombia|chile|peru|costa\s+rica"
+    r"|canada|uk\b|united\s+kingdom|ireland|germany|france|spain"
+    r"|netherlands|sweden|norway|denmark|finland|poland|portugal"
+    r"|italy|switzerland|austria|czech|romania|hungary|belgium"
+    r"|israel|india|japan|korea|china|singapore|australia"
+    r"|new\s+zealand|philippines|indonesia|vietnam|thailand|taiwan"
+    r"|south\s+africa|nigeria|kenya|egypt|turkey|ukraine|russia"
+    # Regions
+    r"|emea|apac|latam|latin\s+america|europe|asia|africa"
+    r"|middle\s+east|oceania|south\s+america|central\s+america"
+    # Non-US cities
+    r"|london|toronto|vancouver|montreal|ottawa|calgary"
+    r"|berlin|munich|paris|amsterdam|dublin|barcelona|madrid"
+    r"|stockholm|oslo|copenhagen|helsinki|warsaw|lisbon|zurich"
+    r"|vienna|prague|bucharest|budapest|brussels"
+    r"|tokyo|seoul|shanghai|beijing|bangalore|mumbai|hyderabad"
+    r"|chennai|pune|delhi|noida|gurgaon|singapore|sydney|melbourne"
+    r"|auckland|tel\s+aviv|cape\s+town|lagos|nairobi|cairo"
+    r"|buenos\s+aires|sao\s+paulo|bogota|lima|santiago"
+    r"|mexico\s+city|guadalajara"
+    r")\b",
+    re.I,
+)
+
 # Locations that disqualify a job even if "remote" appears in description
+# (US cities that are outside Nadine's target area)
 _EXCLUDE_LOCATION_RE = re.compile(
     r"\b(new\s+york|nyc|manhattan|brooklyn|san\s+francisco|sf\b|bay\s+area"
     r"|los\s+angeles|la\b|chicago|boston|seattle|denver|austin|portland"
     r"|atlanta|miami|dallas|houston|phoenix|philadelphia"
-    r"|washington\s*,?\s*d\.?c\.?"
-    r"|london|toronto|vancouver|montreal|canada"
-    r"|berlin|paris|dublin|amsterdam|sydney|melbourne"
-    r"|singapore|tokyo|bangalore|mumbai|hyderabad)\b",
+    r"|washington\s*,?\s*d\.?c\.?)\b",
     re.I,
 )
 
@@ -210,8 +236,13 @@ def _matches_location(job: dict[str, Any]) -> bool:
 
     full_text = f"{location} {title} {desc_start}"
 
-    # Reject non-US postings
+    # Reject non-US postings (explicit "X only" patterns)
     if _NON_US_RE.search(full_text):
+        return False
+
+    # Reject if location field contains a foreign country/region/city
+    # (e.g. "Argentina Remote", "Remote, Germany, EMEA", "Bangalore, India")
+    if _FOREIGN_LOCATION_RE.search(location):
         return False
 
     # If the location field itself matches a local area, accept
@@ -222,13 +253,12 @@ def _matches_location(job: dict[str, Any]) -> bool:
     # (but NOT if it's only in the description — too many false positives)
     loc_and_title = f"{location} {title}"
     if _REMOTE_RE.search(loc_and_title):
-        # But reject if the location clearly says a non-local city
+        # But reject if the location clearly says a non-local US city
         if _EXCLUDE_LOCATION_RE.search(location):
             return False
         return True
 
     # If description mentions remote but location says a non-local city, reject
-    # This catches "New York, NY" jobs that mention remote flexibility in the JD
     if _REMOTE_RE.search(desc_start) and _EXCLUDE_LOCATION_RE.search(location):
         return False
 
