@@ -4,3 +4,4 @@ __pycache__/
 *.pyc
 digest_preview.html
 data/
+jobs_export_*.xlsx
